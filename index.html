@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AWS Student Community Day | Event Hub</title>
+  <title>AWS Student Community Day | Interactive Event Hub</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -13,147 +13,198 @@
       theme: {
         extend: {
           colors: {
-            awsnavy: '#0F172A',
-            awsdark: '#1E293B',
+            awsnavy: '#232F3E',
+            awsnavydark: '#19212C',
             awsorange: '#FF9900',
-            awsorangehover: '#EC7211',
+            awsorangedark: '#EC7211',
+            awsbg: '#F8FAFC',
+          },
+          boxShadow: {
+            'fancy': '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)',
+            'glow': '0 0 20px rgba(255, 153, 0, 0.25)',
           }
         }
       }
     }
   </script>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-awsbg text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-awsorange selection:text-white">
 
-  <!-- Sticky Navigation -->
-  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+  <!-- Sticky Top Navigation -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="bg-awsorange text-slate-900 font-bold p-2 rounded-lg text-xs tracking-wider">AWS</div>
-        <span class="font-bold text-lg tracking-tight">Student Community Day</span>
+        <div class="bg-awsnavy text-awsorange font-black p-2 rounded-xl text-xs tracking-wider shadow-sm flex items-center gap-1">
+          <span>AWS</span>
+          <span class="text-white font-light">|</span>
+          <span class="text-white">STUDENT</span>
+        </div>
+        <span class="font-extrabold text-slate-900 tracking-tight text-base sm:text-lg">Community Day Hub</span>
       </div>
-      <nav class="hidden md:flex gap-6 text-sm text-slate-400 font-medium">
-        <a href="#about" class="hover:text-white transition">About</a>
-        <a href="#schedule" class="hover:text-white transition">Agenda</a>
-        <a href="#speakers" class="hover:text-white transition">Speakers</a>
-        <a href="#prep" class="hover:text-white transition">Prep Guide</a>
+
+      <nav class="hidden md:flex items-center gap-8 text-xs font-bold text-slate-600 uppercase tracking-wider">
+        <a href="#pathfinder" class="hover:text-awsorangedark transition">Tracks</a>
+        <a href="#ama" class="hover:text-awsorangedark transition">AMA Sessions</a>
+        <a href="#ideabox" class="hover:text-awsorangedark transition">Idea Box</a>
+        <a href="#certificate" class="hover:text-awsorangedark transition">Certificates</a>
       </nav>
-      <button onclick="openModal('reg-modal')" class="bg-awsorange hover:bg-awsorangehover text-slate-900 font-semibold px-4 py-2 rounded-lg text-sm transition shadow-md shadow-awsorange/10">
-        Register Now
-      </button>
+
+      <div class="flex items-center gap-3">
+        <!-- Live Day-Of Toggle Switch -->
+        <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full shadow-inner">
+          <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider hidden sm:inline">Live Mode</span>
+          <button id="mode-toggle" onclick="toggleLiveMode()" class="w-9 h-5 bg-slate-300 rounded-full relative transition-colors focus:outline-none">
+            <div id="toggle-circle" class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform shadow-sm"></div>
+          </button>
+        </div>
+
+        <button onclick="openModal('reg-modal')" class="bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-bold px-4 py-2 rounded-xl text-xs sm:text-sm shadow-md shadow-awsorange/20 hover:shadow-lg transition">
+          Register Ticket
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-awsorange text-xs font-semibold uppercase tracking-wider mb-6">
-      <i data-lucide="sparkles" class="w-4 h-4"></i> Designed for Students & Beginners
+  <!-- Dynamic Live Day-Of Bar (Hidden by default) -->
+  <div id="live-cockpit" class="hidden bg-gradient-to-r from-amber-500 via-awsorange to-orange-500 py-3 px-4 text-slate-900 font-medium shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm">
+      <div class="flex items-center gap-2 font-bold">
+        <span class="flex h-2.5 w-2.5 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
+        </span>
+        <span class="uppercase tracking-wider">Happening Now: Track 1 Auditorium</span>
+      </div>
+      <p class="font-bold text-slate-900">Deploying Serverless Architectures on AWS Free Tier</p>
+      <div class="flex gap-2">
+        <button class="bg-awsnavy text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow hover:bg-awsnavydark transition">Join Live Stream</button>
+      </div>
     </div>
-    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-      Master the Cloud. <br class="hidden sm:inline"/>
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-awsorange to-orange-500">Build the Future.</span>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center overflow-hidden">
+    <!-- Subtle Gradient Background Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-tr from-amber-200/40 to-orange-300/30 blur-3xl rounded-full -z-10"></div>
+
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-awsorangedark text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+      <i data-lucide="sparkles" class="w-4 h-4 text-awsorange"></i> Official AWS Student Community Event
+    </div>
+
+    <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-none mb-6">
+      Rethink How You Build <br />
+      <span class="bg-gradient-to-r from-awsnavy via-slate-800 to-awsorangedark bg-clip-text text-transparent">In The Cloud.</span>
     </h1>
-    <p class="max-w-2xl mx-auto text-slate-400 text-base sm:text-lg mb-8">
-      A 1-day immersive community conference packed with hands-on labs, real-world AWS architecture tracks, and career networking.
+
+    <p class="max-w-2xl mx-auto text-slate-600 text-base sm:text-lg mb-8 font-normal leading-relaxed">
+      A zero-cost, hands-on student conference built to help you learn real-world DevOps, cloud architectures, and machine learning through interactive workshops.
     </p>
 
-    <!-- Target Audience Indicators -->
-    <div class="flex flex-wrap justify-center gap-3 mb-10">
-      <span class="px-3 py-1 rounded-md bg-slate-800/80 text-slate-300 text-xs font-medium border border-slate-700/50">⚡ Beginner Friendly</span>
-      <span class="px-3 py-1 rounded-md bg-slate-800/80 text-slate-300 text-xs font-medium border border-slate-700/50">🛠️ Hands-on Code</span>
-      <span class="px-3 py-1 rounded-md bg-slate-800/80 text-slate-300 text-xs font-medium border border-slate-700/50">💼 Resume Review & Networking</span>
+    <!-- Interactive Badges -->
+    <div class="flex flex-wrap justify-center gap-2.5 mb-10">
+      <span class="px-3 py-1.5 rounded-xl bg-white text-slate-700 text-xs font-semibold shadow-sm border border-slate-200/80 flex items-center gap-1.5">⚡ Beginner Friendly</span>
+      <span class="px-3 py-1.5 rounded-xl bg-white text-slate-700 text-xs font-semibold shadow-sm border border-slate-200/80 flex items-center gap-1.5">🛠️ Real Hands-on Code</span>
+      <span class="px-3 py-1.5 rounded-xl bg-white text-slate-700 text-xs font-semibold shadow-sm border border-slate-200/80 flex items-center gap-1.5">💼 Resume & Portfolio Reviews</span>
     </div>
 
     <div class="flex flex-col sm:flex-row justify-center gap-4">
-      <button onclick="openModal('reg-modal')" class="bg-awsorange hover:bg-awsorangehover text-slate-900 font-bold px-8 py-3.5 rounded-xl text-base transition shadow-lg shadow-awsorange/20">
+      <button onclick="openModal('reg-modal')" class="bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-extrabold px-8 py-3.5 rounded-xl text-base shadow-lg shadow-awsorange/25 transition">
         Claim Free Ticket
       </button>
-      <a href="#schedule" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-6 py-3.5 rounded-xl text-base transition border border-slate-700">
+      <a href="#pathfinder" class="bg-white hover:bg-slate-50 text-slate-800 font-bold px-7 py-3.5 rounded-xl text-base border border-slate-200 shadow-sm transition">
         Explore Agenda
       </a>
     </div>
   </section>
 
-  <!-- Interactive Agenda / Schedule Section -->
-  <section id="schedule" class="py-16 bg-slate-950/50 border-y border-slate-800">
+  <!-- Interactive Skill Pathfinder & Dynamic Agenda -->
+  <section id="pathfinder" class="py-16 bg-white border-y border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-        <div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Event Schedule</h2>
-          <p class="text-slate-400 text-sm">Filter sessions by topic or experience level.</p>
-        </div>
-        
-        <!-- Filter Bar -->
-        <div class="flex flex-wrap gap-2">
-          <button onclick="filterAgenda('all')" class="filter-btn active-filter px-4 py-2 rounded-lg text-xs font-semibold bg-awsorange text-slate-900 transition">All Sessions</button>
-          <button onclick="filterAgenda('beginner')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Beginner</button>
-          <button onclick="filterAgenda('devops')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">DevOps & Cloud</button>
-          <button onclick="filterAgenda('ai')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">AI & ML</button>
-        </div>
+      
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border border-slate-200">Personalized Schedule</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-3 mb-2">Skill Pathfinder Agenda</h2>
+        <p class="text-slate-500 text-xs sm:text-sm">Select your current knowledge level to automatically highlight the right sessions for you.</p>
       </div>
 
-      <!-- Agenda Cards -->
-      <div class="space-y-4" id="agenda-container">
+      <!-- Level Selection Buttons -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-12">
+        <button onclick="applySkillFilter('beginner')" class="skill-btn bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl text-left hover:border-awsorange transition shadow-sm group">
+          <div class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider mb-1">Beginner Track</div>
+          <div class="text-sm font-bold text-slate-800">New to Cloud & AWS</div>
+        </button>
+        <button onclick="applySkillFilter('devops')" class="skill-btn bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl text-left hover:border-awsorange transition shadow-sm group">
+          <div class="text-xs font-extrabold text-blue-600 uppercase tracking-wider mb-1">DevOps Track</div>
+          <div class="text-sm font-bold text-slate-800">Docker, Linux & CI/CD</div>
+        </button>
+        <button onclick="applySkillFilter('ai')" class="skill-btn bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl text-left hover:border-awsorange transition shadow-sm group">
+          <div class="text-xs font-extrabold text-purple-600 uppercase tracking-wider mb-1">AI / ML Track</div>
+          <div class="text-sm font-bold text-slate-800">Bedrock & Models</div>
+        </button>
+      </div>
 
-        <!-- Session Item 1 -->
-        <div class="session-card bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 hover:border-awsorange/50 transition flex flex-col md:flex-row justify-between gap-4" data-category="beginner">
+      <!-- Agenda Items Grid -->
+      <div class="space-y-4 max-w-4xl mx-auto" id="agenda-list">
+        
+        <!-- Session 1 -->
+        <div class="session-card bg-slate-50/70 border border-slate-200 rounded-2xl p-6 transition shadow-sm hover:shadow-md flex flex-col sm:flex-row justify-between gap-4" data-level="beginner">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2.5 py-0.5 rounded-full">Beginner</span>
-              <span class="text-xs text-slate-400">Track 1 • Main Auditorium</span>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-md">Beginner Friendly</span>
+              <span class="text-xs text-slate-400 font-medium">Auditorium A</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-1">Getting Started with AWS Free Tier & Cloud Basics</h3>
-            <p class="text-slate-400 text-sm mb-3">Learn how to deploy your first application without incurring unintended charges.</p>
-            <div class="flex items-center gap-2 text-xs text-slate-400">
-              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: AWS Cloud Ambassador
-            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Getting Started with AWS Free Tier & Core Services</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">Learn how to build and host student projects for free without worrying about billing surprises.</p>
+            <span class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: AWS Student Ambassador
+            </span>
           </div>
-          <div class="flex md:flex-col items-start md:items-end justify-between shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-700">
-            <span class="text-sm font-semibold text-awsorange">10:00 AM - 11:00 AM</span>
-            <button onclick="addToCalendar('AWS Free Tier Session', '10:00 AM')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
-              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Add to Schedule
+          <div class="flex sm:flex-col justify-between items-start sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200">
+            <span class="text-sm font-extrabold text-awsorangedark">10:00 AM IST</span>
+            <button onclick="alert('Session saved to your personal schedule!')" class="text-xs bg-awsnavy hover:bg-awsnavydark text-white font-bold px-3 py-2 rounded-xl transition shadow-sm">
+              Bookmark
             </button>
           </div>
         </div>
 
-        <!-- Session Item 2 -->
-        <div class="session-card bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 hover:border-awsorange/50 transition flex flex-col md:flex-row justify-between gap-4" data-category="devops">
+        <!-- Session 2 -->
+        <div class="session-card bg-slate-50/70 border border-slate-200 rounded-2xl p-6 transition shadow-sm hover:shadow-md flex flex-col sm:flex-row justify-between gap-4 opacity-40" data-level="devops">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-xs font-bold text-blue-400 bg-blue-950/60 border border-blue-800 px-2.5 py-0.5 rounded-full">DevOps</span>
-              <span class="text-xs text-slate-400">Track 2 • Lab B</span>
+              <span class="text-[10px] font-bold text-blue-700 bg-blue-100 border border-blue-300 px-2.5 py-0.5 rounded-md">DevOps Track</span>
+              <span class="text-xs text-slate-400 font-medium">Lab B</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-1">Containerization & Docker Orchestration on AWS</h3>
-            <p class="text-slate-400 text-sm mb-3">Hands-on lab: Packing Python microservices and launching them on AWS ECS.</p>
-            <div class="flex items-center gap-2 text-xs text-slate-400">
-              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: DevOps Specialist
-            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Containerizing Applications with Docker & AWS ECS</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">Hands-on lab: Packing Python microservices and orchestrating multi-container clusters.</p>
+            <span class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: Senior DevOps Lead
+            </span>
           </div>
-          <div class="flex md:flex-col items-start md:items-end justify-between shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-700">
-            <span class="text-sm font-semibold text-awsorange">11:15 AM - 12:30 PM</span>
-            <button onclick="addToCalendar('Docker Session', '11:15 AM')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
-              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Add to Schedule
+          <div class="flex sm:flex-col justify-between items-start sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200">
+            <span class="text-sm font-extrabold text-awsorangedark">11:30 AM IST</span>
+            <button onclick="alert('Session saved to your personal schedule!')" class="text-xs bg-awsnavy hover:bg-awsnavydark text-white font-bold px-3 py-2 rounded-xl transition shadow-sm">
+              Bookmark
             </button>
           </div>
         </div>
 
-        <!-- Session Item 3 -->
-        <div class="session-card bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 hover:border-awsorange/50 transition flex flex-col md:flex-row justify-between gap-4" data-category="ai">
+        <!-- Session 3 -->
+        <div class="session-card bg-slate-50/70 border border-slate-200 rounded-2xl p-6 transition shadow-sm hover:shadow-md flex flex-col sm:flex-row justify-between gap-4 opacity-40" data-level="ai">
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-xs font-bold text-purple-400 bg-purple-950/60 border border-purple-800 px-2.5 py-0.5 rounded-full">AI / ML</span>
-              <span class="text-xs text-slate-400">Track 1 • Main Auditorium</span>
+              <span class="text-[10px] font-bold text-purple-700 bg-purple-100 border border-purple-300 px-2.5 py-0.5 rounded-md">AI / ML Track</span>
+              <span class="text-xs text-slate-400 font-medium">Main Auditorium</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-1">Building Generative AI Apps with Amazon Bedrock</h3>
-            <p class="text-slate-400 text-sm mb-3">An introduction to foundational models and prompt engineering for student developers.</p>
-            <div class="flex items-center gap-2 text-xs text-slate-400">
-              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: AI Research Lead
-            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Building Generative AI Applications with Amazon Bedrock</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">Explore foundational models, prompt engineering, and building smart student chatbots.</p>
+            <span class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: AI Researcher
+            </span>
           </div>
-          <div class="flex md:flex-col items-start md:items-end justify-between shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-700">
-            <span class="text-sm font-semibold text-awsorange">01:30 PM - 02:45 PM</span>
-            <button onclick="addToCalendar('GenAI Session', '01:30 PM')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
-              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Add to Schedule
+          <div class="flex sm:flex-col justify-between items-start sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200">
+            <span class="text-sm font-extrabold text-awsorangedark">02:00 PM IST</span>
+            <button onclick="alert('Session saved to your personal schedule!')" class="text-xs bg-awsnavy hover:bg-awsnavydark text-white font-bold px-3 py-2 rounded-xl transition shadow-sm">
+              Bookmark
             </button>
           </div>
         </div>
@@ -162,80 +213,172 @@
     </div>
   </section>
 
-  <!-- Pre-Event Preparation Section -->
-  <section id="prep" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-12">
-      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">Pre-Event Prep Checklist</h2>
-      <p class="text-slate-400 text-sm">Complete these steps before attending to get the most out of hands-on workshops.</p>
+  <!-- Member AMA Corner & Crowdsourced Idea Box Section -->
+  <section id="ama" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    
+    <!-- Member AMA Corner -->
+    <div>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider border border-blue-200">Interactive Networking</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Member AMA Corner</h2>
+          <p class="text-slate-500 text-xs sm:text-sm">Get direct, unvarnished career & technical advice from engineers and student mentors.</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- AMA Card 1 -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">Live Q&A Session</span>
+              <span class="text-xs text-slate-400 font-semibold">02:30 PM • Main Stage</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-2">"How I Cracked an AWS Cloud & DevOps Internship as a Student"</h3>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">Hosted by **Cloud Community Ambassadors**. Ask questions live about certification paths, open-source projects, and technical interviews.</p>
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <span class="text-xs font-semibold text-slate-500">42 Questions Queued</span>
+            <button onclick="openModal('reg-modal')" class="text-xs bg-awsorange hover:bg-awsorangedark text-slate-900 font-bold px-3.5 py-2 rounded-xl shadow-sm transition">Ask A Question</button>
+          </div>
+        </div>
+
+        <!-- AMA Card 2 -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2.5 py-0.5 rounded-full">Async Text Forum</span>
+              <span class="text-xs text-slate-400 font-semibold">Event Week</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-2">"Open Source Contributions & GSoC Prep"</h3>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">Post your repository blockers, pull request questions, or environment setup issues for instant community feedback.</p>
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <span class="text-xs font-semibold text-slate-500">18 Active Threads</span>
+            <button class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3.5 py-2 rounded-xl transition border border-slate-200">Browse Threads</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="grid sm:grid-cols-3 gap-6">
-      <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-6">
-        <div class="w-10 h-10 rounded-lg bg-awsorange/10 text-awsorange flex items-center justify-center font-bold mb-4">1</div>
-        <h4 class="font-bold text-white mb-2">AWS Free Tier Account</h4>
-        <p class="text-xs text-slate-400 leading-relaxed">Ensure you have an active AWS account ready for real-time workshop exercises.</p>
+    <!-- Crowdsourced Idea Box -->
+    <div id="ideabox" class="bg-gradient-to-br from-slate-900 to-awsnavy text-white rounded-3xl p-6 sm:p-10 shadow-xl">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-awsorange/20 border border-awsorange/40 text-awsorange text-xs font-bold uppercase tracking-wider">Community Voice</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Crowdsourced Idea Box</h2>
+          <p class="text-slate-300 text-xs sm:text-sm">Submit and upvote topics or hackathons you want the AWS Cloud Club to organize next.</p>
+        </div>
+        <button onclick="submitIdeaPrompt()" class="bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-extrabold text-xs px-4 py-3 rounded-xl shadow-md transition">
+          + Submit New Idea
+        </button>
       </div>
 
-      <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-6">
-        <div class="w-10 h-10 rounded-lg bg-awsorange/10 text-awsorange flex items-center justify-center font-bold mb-4">2</div>
-        <h4 class="font-bold text-white mb-2">Install Git & Docker</h4>
-        <p class="text-xs text-slate-400 leading-relaxed">Have Git and Docker Desktop installed on your laptop to follow along with live labs.</p>
-      </div>
+      <div class="space-y-3" id="idea-container">
+        
+        <!-- Idea 1 -->
+        <div class="bg-awsnavydark/80 border border-slate-700/60 rounded-2xl p-4 flex items-center justify-between gap-4 shadow-sm">
+          <div class="flex items-center gap-4">
+            <button onclick="upvote(this)" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 rounded-xl p-2.5 flex flex-col items-center min-w-[50px] transition">
+              <i data-lucide="chevron-up" class="w-4 h-4 text-awsorange"></i>
+              <span class="text-xs font-extrabold text-white count">142</span>
+            </button>
+            <div>
+              <h4 class="text-sm font-bold text-white mb-0.5">Weekend Hackathon: Serverless Micro-Apps</h4>
+              <p class="text-xs text-slate-300">A 48-hour challenge building AWS Lambda & DynamoDB solutions for campus utility.</p>
+            </div>
+          </div>
+          <span class="hidden sm:inline-block text-[10px] font-bold bg-slate-800 text-awsorange border border-awsorange/30 px-3 py-1 rounded-full">Proposed Hackathon</span>
+        </div>
 
-      <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-6">
-        <div class="w-10 h-10 rounded-lg bg-awsorange/10 text-awsorange flex items-center justify-center font-bold mb-4">3</div>
-        <h4 class="font-bold text-white mb-2">Join Discord / WhatsApp</h4>
-        <p class="text-xs text-slate-400 leading-relaxed">Connect with fellow student attendees and mentors before the event starts.</p>
+        <!-- Idea 2 -->
+        <div class="bg-awsnavydark/80 border border-slate-700/60 rounded-2xl p-4 flex items-center justify-between gap-4 shadow-sm">
+          <div class="flex items-center gap-4">
+            <button onclick="upvote(this)" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 rounded-xl p-2.5 flex flex-col items-center min-w-[50px] transition">
+              <i data-lucide="chevron-up" class="w-4 h-4 text-awsorange"></i>
+              <span class="text-xs font-extrabold text-white count">98</span>
+            </button>
+            <div>
+              <h4 class="text-sm font-bold text-white mb-0.5">AWS Cloud Practitioner Exam Study Cohort</h4>
+              <p class="text-xs text-slate-300">Weekly peer study groups with certification voucher giveaways for top contributors.</p>
+            </div>
+          </div>
+          <span class="hidden sm:inline-block text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700 px-3 py-1 rounded-full">Study Group</span>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Verifiable Digital Certificate Previewer -->
+  <section id="certificate" class="py-16 bg-white border-t border-slate-200/80">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-200">Proof of Skill</span>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 mb-2">Earn Your Digital Badge</h2>
+      <p class="text-xs sm:text-sm text-slate-500 mb-6">Type your full name below to preview your verifiable event completion certificate.</p>
+
+      <input type="text" id="student-name-input" oninput="updateCert()" placeholder="Type your full name" class="bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm text-center font-bold text-slate-800 mb-8 focus:outline-none focus:border-awsorange w-72 shadow-inner" />
+
+      <!-- Certificate Visual Mockup -->
+      <div class="bg-gradient-to-b from-white to-amber-50/40 border-4 border-slate-900 rounded-3xl p-8 sm:p-10 max-w-lg mx-auto shadow-fancy relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-awsorange/10 rounded-full blur-xl"></div>
+        <div class="text-xs font-black tracking-widest text-awsorangedark uppercase mb-2">AWS Student Community Day 2026</div>
+        <div class="text-2xl sm:text-3xl font-black text-slate-900 my-4" id="cert-name">FATIMAH</div>
+        <p class="text-xs text-slate-600 mb-6 leading-relaxed">has successfully attended and completed the technical workshops during the regional AWS Cloud Conference.</p>
+        <div class="inline-flex items-center gap-2 bg-awsnavy text-white text-[11px] font-bold px-4 py-1.5 rounded-full shadow">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-awsorange"></i> Verifiable Credential Badge
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Registration Modal -->
-  <div id="reg-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
-      <button onclick="closeModal('reg-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+  <div id="reg-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl">
+      <button onclick="closeModal('reg-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <div id="modal-form-state">
-        <h3 class="text-xl font-bold text-white mb-1">Student Registration</h3>
-        <p class="text-xs text-slate-400 mb-6">Reserve your spot for AWS Student Community Day.</p>
+        <h3 class="text-xl font-extrabold text-slate-900 mb-1">Student Registration</h3>
+        <p class="text-xs text-slate-500 mb-6">Claim your free ticket for AWS Student Community Day.</p>
 
         <form onsubmit="handleRegister(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Full Name</label>
-            <input type="text" required placeholder="Fatimah" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-awsorange" />
+            <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+            <input type="text" required placeholder="Fatimah" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-awsorange" />
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Student Email</label>
-            <input type="email" required placeholder="student@university.edu" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-awsorange" />
+            <label class="block text-xs font-bold text-slate-700 mb-1">Student Email (.edu or college mail)</label>
+            <input type="email" required placeholder="student@university.edu" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-awsorange" />
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Experience Level</label>
-            <select class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-awsorange">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Experience Level</label>
+            <select class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-awsorange font-medium">
               <option>Beginner (New to Cloud)</option>
-              <option>Intermediate (Some AWS experience)</option>
+              <option>Intermediate (DevOps & Docker user)</option>
               <option>Advanced (Building apps on AWS)</option>
             </select>
           </div>
 
-          <button type="submit" class="w-full bg-awsorange hover:bg-awsorangehover text-slate-900 font-bold py-3 rounded-lg text-sm transition mt-2">
-            Confirm Ticket
+          <button type="submit" class="w-full bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-extrabold py-3 rounded-xl text-sm shadow-md transition mt-2">
+            Confirm Registration
           </button>
         </form>
       </div>
 
       <!-- Confirmation State -->
       <div id="modal-success-state" class="hidden text-center py-4">
-        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/40">
-          <i data-lucide="check" class="w-6 h-6"></i>
+        <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-300 shadow-sm">
+          <i data-lucide="check" class="w-7 h-7"></i>
         </div>
-        <h3 class="text-xl font-bold text-white mb-2">You're Registered!</h3>
-        <p class="text-xs text-slate-400 mb-6">A confirmation pass and event calendar invite have been sent to your email.</p>
-        <button onclick="closeModal('reg-modal')" class="bg-slate-700 hover:bg-slate-600 text-white font-medium px-6 py-2 rounded-lg text-sm">
-          Close Window
+        <h3 class="text-xl font-black text-slate-900 mb-2">Ticket Confirmed!</h3>
+        <p class="text-xs text-slate-500 mb-6 leading-relaxed">Your event pass and calendar invite `.ics` have been sent to your student email inbox.</p>
+        <button onclick="closeModal('reg-modal')" class="bg-awsnavy hover:bg-awsnavydark text-white font-bold px-6 py-2.5 rounded-xl text-xs transition shadow-md">
+          Back to Hub
         </button>
       </div>
 
@@ -243,13 +386,83 @@
   </div>
 
   <!-- Footer -->
-  <footer class="mt-auto border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500">
-    <p>© 2026 AWS Cloud Club | Built for Student Developers</p>
+  <footer class="mt-auto border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="font-bold text-slate-700">AWS Student Community Day Redesign</div>
+      <p>© 2026 AWS Cloud Club. Designed for Student Developers.</p>
+    </div>
   </footer>
 
   <!-- Scripts -->
   <script>
     lucide.createIcons();
+
+    let liveMode = false;
+    function toggleLiveMode() {
+      liveMode = !liveMode;
+      const cockpit = document.getElementById('live-cockpit');
+      const toggle = document.getElementById('mode-toggle');
+      const circle = document.getElementById('toggle-circle');
+
+      if (liveMode) {
+        cockpit.classList.remove('hidden');
+        toggle.classList.add('bg-awsorange');
+        circle.classList.add('translate-x-4');
+      } else {
+        cockpit.classList.add('hidden');
+        toggle.classList.remove('bg-awsorange');
+        circle.classList.remove('translate-x-4');
+      }
+    }
+
+    function applySkillFilter(level) {
+      const cards = document.querySelectorAll('.session-card');
+      cards.forEach(card => {
+        if (card.dataset.level === level) {
+          card.classList.remove('opacity-40', 'bg-slate-50/70');
+          card.classList.add('bg-white', 'border-awsorange', 'ring-2', 'ring-awsorange/30', 'shadow-md');
+        } else {
+          card.classList.add('opacity-40', 'bg-slate-50/70');
+          card.classList.remove('bg-white', 'border-awsorange', 'ring-2', 'ring-awsorange/30', 'shadow-md');
+        }
+      });
+    }
+
+    function updateCert() {
+      const input = document.getElementById('student-name-input').value;
+      document.getElementById('cert-name').innerText = input.trim() !== '' ? input.toUpperCase() : 'FATIMAH';
+    }
+
+    function upvote(btn) {
+      const countSpan = btn.querySelector('.count');
+      let current = parseInt(countSpan.innerText);
+      countSpan.innerText = current + 1;
+      btn.classList.add('border-awsorange');
+    }
+
+    function submitIdeaPrompt() {
+      const ideaTitle = prompt("Enter your project idea for AWS Cloud Club:");
+      if (ideaTitle) {
+        const container = document.getElementById('idea-container');
+        const newItem = document.createElement('div');
+        newItem.className = "bg-awsnavydark/80 border border-slate-700/60 rounded-2xl p-4 flex items-center justify-between gap-4 shadow-sm";
+        newItem.innerHTML = `
+          <div class="flex items-center gap-4">
+            <button onclick="upvote(this)" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 rounded-xl p-2.5 flex flex-col items-center min-w-[50px] transition">
+              <i data-lucide="chevron-up" class="w-4 h-4 text-awsorange"></i>
+              <span class="text-xs font-extrabold text-white count">1</span>
+            </button>
+            <div>
+              <h4 class="text-sm font-bold text-white mb-0.5">${ideaTitle}</h4>
+              <p class="text-xs text-slate-300">Submitted just now by a student attendee.</p>
+            </div>
+          </div>
+          <span class="hidden sm:inline-block text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700 px-3 py-1 rounded-full">New Submission</span>
+        `;
+        container.prepend(newItem);
+        lucide.createIcons();
+      }
+    }
 
     function openModal(id) {
       document.getElementById(id).classList.remove('hidden');
@@ -263,30 +476,6 @@
       e.preventDefault();
       document.getElementById('modal-form-state').classList.add('hidden');
       document.getElementById('modal-success-state').classList.remove('hidden');
-    }
-
-    function filterAgenda(category) {
-      const cards = document.querySelectorAll('.session-card');
-      const buttons = document.querySelectorAll('.filter-btn');
-
-      buttons.forEach(btn => {
-        btn.classList.remove('bg-awsorange', 'text-slate-900');
-        btn.classList.add('bg-slate-800', 'text-slate-300');
-      });
-      event.target.classList.remove('bg-slate-800', 'text-slate-300');
-      event.target.classList.add('bg-awsorange', 'text-slate-900');
-
-      cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
-
-    function addToCalendar(title, time) {
-      alert(`Added "${title}" (${time}) to your schedule!`);
     }
   </script>
 </body>
