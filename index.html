@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS Student Community Day | Event Hub</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            awsnavy: '#0F172A',
+            awsdark: '#1E293B',
+            awsorange: '#FF9900',
+            awsorangehover: '#EC7211',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- Sticky Navigation -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-awsorange text-slate-900 font-bold p-2 rounded-lg text-xs tracking-wider">AWS</div>
+        <span class="font-bold text-lg tracking-tight">Student Community Day</span>
+      </div>
+      <nav class="hidden md:flex gap-6 text-sm text-slate-400 font-medium">
+        <a href="#about" class="hover:text-white transition">About</a>
+        <a href="#schedule" class="hover:text-white transition">Agenda</a>
+        <a href="#speakers" class="hover:text-white transition">Speakers</a>
+        <a href="#prep" class="hover:text-white transition">Prep Guide</a>
+      </nav>
+      <button onclick="openModal('reg-modal')" class="bg-awsorange hover:bg-awsorangehover text-slate-900 font-semibold px-4 py-2 rounded-lg text-sm transition shadow-md shadow-awsorange/10">
+        Register Now
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-awsorange text-xs font-semibold uppercase tracking-wider mb-6">
+      <i data-lucide="sparkles" class="w-4 h-4"></i> Designed for Students & Beginners
+    </div>
+    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+      Master the Cloud. <br class="hidden sm:inline"/>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-awsorange to-orange-500">Build the Future.</span>
+    </h1>
+    <p class="max-w-2xl mx-auto text-slate-400 text-base sm:text-lg mb-8">
+      A 1-day immersive community conference packed with hands-on labs, real-world AWS architecture tracks, and career networking.
+    </p>
+
+    <!-- Target Audience Indicators -->
+    <div class="flex flex-wrap justify-center gap-3 mb-10">
+      <span class="px-3 py-1 rounded-md bg-slate-800/80 text-slate-300 text-xs font-medium border border-slate-700/50">⚡ Beginner Friendly</span>
+      <span class="px-3 py-1 rounded-md bg-slate-800/80 text-slate-300 text-xs font-medium border border-slate-700/50">🛠️ Hands-on Code</span>
+      <span class="px-3 py-1 rounded-md bg-slate-800/80 text-slate-300 text-xs font-medium border border-slate-700/50">💼 Resume Review & Networking</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+      <button onclick="openModal('reg-modal')" class="bg-awsorange hover:bg-awsorangehover text-slate-900 font-bold px-8 py-3.5 rounded-xl text-base transition shadow-lg shadow-awsorange/20">
+        Claim Free Ticket
+      </button>
+      <a href="#schedule" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-6 py-3.5 rounded-xl text-base transition border border-slate-700">
+        Explore Agenda
+      </a>
+    </div>
+  </section>
+
+  <!-- Interactive Agenda / Schedule Section -->
+  <section id="schedule" class="py-16 bg-slate-950/50 border-y border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Event Schedule</h2>
+          <p class="text-slate-400 text-sm">Filter sessions by topic or experience level.</p>
+        </div>
+        
+        <!-- Filter Bar -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filterAgenda('all')" class="filter-btn active-filter px-4 py-2 rounded-lg text-xs font-semibold bg-awsorange text-slate-900 transition">All Sessions</button>
+          <button onclick="filterAgenda('beginner')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Beginner</button>
+          <button onclick="filterAgenda('devops')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">DevOps & Cloud</button>
+          <button onclick="filterAgenda('ai')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">AI & ML</button>
+        </div>
+      </div>
+
+      <!-- Agenda Cards -->
+      <div class="space-y-4" id="agenda-container">
+
+        <!-- Session Item 1 -->
+        <div class="session-card bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 hover:border-awsorange/50 transition flex flex-col md:flex-row justify-between gap-4" data-category="beginner">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2.5 py-0.5 rounded-full">Beginner</span>
+              <span class="text-xs text-slate-400">Track 1 • Main Auditorium</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Getting Started with AWS Free Tier & Cloud Basics</h3>
+            <p class="text-slate-400 text-sm mb-3">Learn how to deploy your first application without incurring unintended charges.</p>
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: AWS Cloud Ambassador
+            </div>
+          </div>
+          <div class="flex md:flex-col items-start md:items-end justify-between shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-700">
+            <span class="text-sm font-semibold text-awsorange">10:00 AM - 11:00 AM</span>
+            <button onclick="addToCalendar('AWS Free Tier Session', '10:00 AM')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Add to Schedule
+            </button>
+          </div>
+        </div>
+
+        <!-- Session Item 2 -->
+        <div class="session-card bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 hover:border-awsorange/50 transition flex flex-col md:flex-row justify-between gap-4" data-category="devops">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold text-blue-400 bg-blue-950/60 border border-blue-800 px-2.5 py-0.5 rounded-full">DevOps</span>
+              <span class="text-xs text-slate-400">Track 2 • Lab B</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Containerization & Docker Orchestration on AWS</h3>
+            <p class="text-slate-400 text-sm mb-3">Hands-on lab: Packing Python microservices and launching them on AWS ECS.</p>
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: DevOps Specialist
+            </div>
+          </div>
+          <div class="flex md:flex-col items-start md:items-end justify-between shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-700">
+            <span class="text-sm font-semibold text-awsorange">11:15 AM - 12:30 PM</span>
+            <button onclick="addToCalendar('Docker Session', '11:15 AM')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Add to Schedule
+            </button>
+          </div>
+        </div>
+
+        <!-- Session Item 3 -->
+        <div class="session-card bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 hover:border-awsorange/50 transition flex flex-col md:flex-row justify-between gap-4" data-category="ai">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold text-purple-400 bg-purple-950/60 border border-purple-800 px-2.5 py-0.5 rounded-full">AI / ML</span>
+              <span class="text-xs text-slate-400">Track 1 • Main Auditorium</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Building Generative AI Apps with Amazon Bedrock</h3>
+            <p class="text-slate-400 text-sm mb-3">An introduction to foundational models and prompt engineering for student developers.</p>
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i> Speaker: AI Research Lead
+            </div>
+          </div>
+          <div class="flex md:flex-col items-start md:items-end justify-between shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-700">
+            <span class="text-sm font-semibold text-awsorange">01:30 PM - 02:45 PM</span>
+            <button onclick="addToCalendar('GenAI Session', '01:30 PM')" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Add to Schedule
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Pre-Event Preparation Section -->
+  <section id="prep" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">Pre-Event Prep Checklist</h2>
+      <p class="text-slate-400 text-sm">Complete these steps before attending to get the most out of hands-on workshops.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-6">
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-6">
+        <div class="w-10 h-10 rounded-lg bg-awsorange/10 text-awsorange flex items-center justify-center font-bold mb-4">1</div>
+        <h4 class="font-bold text-white mb-2">AWS Free Tier Account</h4>
+        <p class="text-xs text-slate-400 leading-relaxed">Ensure you have an active AWS account ready for real-time workshop exercises.</p>
+      </div>
+
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-6">
+        <div class="w-10 h-10 rounded-lg bg-awsorange/10 text-awsorange flex items-center justify-center font-bold mb-4">2</div>
+        <h4 class="font-bold text-white mb-2">Install Git & Docker</h4>
+        <p class="text-xs text-slate-400 leading-relaxed">Have Git and Docker Desktop installed on your laptop to follow along with live labs.</p>
+      </div>
+
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-6">
+        <div class="w-10 h-10 rounded-lg bg-awsorange/10 text-awsorange flex items-center justify-center font-bold mb-4">3</div>
+        <h4 class="font-bold text-white mb-2">Join Discord / WhatsApp</h4>
+        <p class="text-xs text-slate-400 leading-relaxed">Connect with fellow student attendees and mentors before the event starts.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registration Modal -->
+  <div id="reg-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
+      <button onclick="closeModal('reg-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div id="modal-form-state">
+        <h3 class="text-xl font-bold text-white mb-1">Student Registration</h3>
+        <p class="text-xs text-slate-400 mb-6">Reserve your spot for AWS Student Community Day.</p>
+
+        <form onsubmit="handleRegister(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Full Name</label>
+            <input type="text" required placeholder="Fatimah" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-awsorange" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Student Email</label>
+            <input type="email" required placeholder="student@university.edu" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-awsorange" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Experience Level</label>
+            <select class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-awsorange">
+              <option>Beginner (New to Cloud)</option>
+              <option>Intermediate (Some AWS experience)</option>
+              <option>Advanced (Building apps on AWS)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="w-full bg-awsorange hover:bg-awsorangehover text-slate-900 font-bold py-3 rounded-lg text-sm transition mt-2">
+            Confirm Ticket
+          </button>
+        </form>
+      </div>
+
+      <!-- Confirmation State -->
+      <div id="modal-success-state" class="hidden text-center py-4">
+        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/40">
+          <i data-lucide="check" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">You're Registered!</h3>
+        <p class="text-xs text-slate-400 mb-6">A confirmation pass and event calendar invite have been sent to your email.</p>
+        <button onclick="closeModal('reg-modal')" class="bg-slate-700 hover:bg-slate-600 text-white font-medium px-6 py-2 rounded-lg text-sm">
+          Close Window
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500">
+    <p>© 2026 AWS Cloud Club | Built for Student Developers</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    lucide.createIcons();
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      document.getElementById('modal-form-state').classList.add('hidden');
+      document.getElementById('modal-success-state').classList.remove('hidden');
+    }
+
+    function filterAgenda(category) {
+      const cards = document.querySelectorAll('.session-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-awsorange', 'text-slate-900');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      event.target.classList.remove('bg-slate-800', 'text-slate-300');
+      event.target.classList.add('bg-awsorange', 'text-slate-900');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function addToCalendar(title, time) {
+      alert(`Added "${title}" (${time}) to your schedule!`);
+    }
+  </script>
+</body>
+</html>
