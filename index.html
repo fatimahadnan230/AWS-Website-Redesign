@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AWS Student Community Day 2026 | IGDTUW</title>
+  <title>AWS Student Community Day 2024 | IGDTUW</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,256 +11,216 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    /* Full-page vibrant orange gradient matching the reference image */
+    /* Gradient matching reference screenshot */
     body {
-      background: radial-gradient(circle at 80% 20%, #FFAA00 0%, #FF6B00 40%, #D83B00 80%, #B32400 100%);
+      background: radial-gradient(circle at 75% 30%, #FF9900 0%, #FF6600 45%, #CC3300 85%, #990000 100%);
       background-attachment: fixed;
       color: #FFFFFF;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Ambient Glowing Orbs */
-    .glow-orb-1 {
-      position: absolute;
-      width: 650px;
-      height: 650px;
-      background: radial-gradient(circle, rgba(255,220,100,0.45) 0%, rgba(255,107,0,0) 70%);
-      top: -150px;
-      right: -100px;
-      pointer-events: none;
-    }
-
-    .glow-orb-2 {
-      position: absolute;
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle, rgba(255,140,0,0.35) 0%, rgba(0,0,0,0) 70%);
-      bottom: 10%;
-      left: -150px;
-      pointer-events: none;
-    }
-
-    /* Glassmorphism elements */
+    /* Glassmorphism Styles */
     .glass-nav {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .glass-card {
       background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .glass-card-hover:hover {
-      background: rgba(255, 255, 255, 0.22);
-      border-color: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
       transform: translateY(-4px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
     }
 
     .glass-pill {
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
-    /* Custom AWS Floating Animation */
-    @keyframes float {
+    /* Keyframe Animations */
+    @keyframes floatSlow {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-18px) rotate(2deg); }
+      50% { transform: translateY(-12px) rotate(1.5deg); }
     }
 
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.08); }
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); opacity: 0.6; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+      100% { transform: scale(0.95); opacity: 0.6; }
     }
 
     .animate-float {
-      animation: float 5s ease-in-out infinite;
+      animation: floatSlow 6s ease-in-out infinite;
     }
 
-    .animate-pulse-glow {
-      animation: pulseGlow 4s ease-in-out infinite;
+    .animate-pulse-ring {
+      animation: pulseRing 4s ease-in-out infinite;
     }
   </style>
 </head>
-<body class="font-sans min-h-screen flex flex-col antialiased selection:bg-white selection:text-orange-600 relative overflow-x-hidden">
+<body class="min-h-screen flex flex-col antialiased selection:bg-white selection:text-orange-600 relative overflow-x-hidden">
 
-  <!-- Glow effects -->
-  <div class="glow-orb-1"></div>
-  <div class="glow-orb-2"></div>
-
-  <!-- NAVBAR -->
+  <!-- NAVBAR (Matches Screenshot Layout) -->
   <header class="sticky top-0 z-50 glass-nav">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <!-- Logo -->
+      
+      <!-- Checkmark Logo -->
       <a href="#home" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-full border-2 border-white/60 flex items-center justify-center bg-white/10 group-hover:bg-white/20 transition">
-          <i data-lucide="cloud" class="w-5 h-5 text-white"></i>
+        <div class="w-10 h-10 rounded-full border-2 border-white/80 flex items-center justify-center bg-white/10 group-hover:bg-white/20 transition">
+          <i data-lucide="check" class="w-5 h-5 text-white stroke-[3]"></i>
         </div>
         <span class="font-bold text-lg text-white tracking-wide">AWS Cloud Club</span>
       </a>
 
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-white/90">
-        <a href="#home" class="hover:text-white transition underline-offset-8 hover:underline">Home</a>
-        <a href="#about" class="hover:text-white transition underline-offset-8 hover:underline">About</a>
-        <a href="#agenda" class="hover:text-white transition underline-offset-8 hover:underline">Agenda</a>
-        <a href="#quiz" class="hover:text-white transition underline-offset-8 hover:underline">Cloud Quiz</a>
-        <a href="#speakers" class="hover:text-white transition underline-offset-8 hover:underline">Speakers</a>
-        <a href="#sponsors" class="hover:text-white transition underline-offset-8 hover:underline">Sponsors</a>
-        <a href="#team" class="hover:text-white transition underline-offset-8 hover:underline">Team</a>
-        <a href="#venue" class="hover:text-white transition underline-offset-8 hover:underline">Venue</a>
-        <a href="#faqs" class="hover:text-white transition underline-offset-8 hover:underline">FAQs</a>
+      <!-- Menu Items -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-white/90">
+        <a href="#home" class="hover:text-white transition">Home</a>
+        <a href="#about" class="hover:text-white transition">About</a>
+        <a href="#agenda" class="hover:text-white transition">Agenda</a>
+        <a href="#quiz" class="hover:text-white transition">Cloud Quiz</a>
+        <a href="#speakers" class="hover:text-white transition">Speakers</a>
+        <a href="#sponsors" class="hover:text-white transition">Sponsors</a>
+        <a href="#team" class="hover:text-white transition">Team</a>
+        <a href="#venue" class="hover:text-white transition">Venue</a>
+        <a href="#faqs" class="hover:text-white transition">FAQs</a>
       </nav>
 
-      <!-- CTA Button -->
-      <button onclick="openModal('reg-modal')" class="border-2 border-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition duration-200">
+      <!-- Pill Action Button -->
+      <button onclick="openModal('reg-modal')" class="border-2 border-white px-7 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition duration-300">
         Register Now
       </button>
     </div>
   </header>
 
-  <!-- HERO / STARTING SECTION (Organized Visual Hierarchy + AWS Animation) -->
-  <section id="home" class="min-h-[90vh] flex items-center py-16 px-6 max-w-7xl mx-auto w-full relative z-10">
+  <!-- HERO SECTION (Recreated exact visual typography & layout from screenshot) -->
+  <section id="home" class="min-h-[85vh] flex items-center py-16 px-6 max-w-7xl mx-auto w-full relative z-10">
     <div class="grid lg:grid-cols-12 gap-12 items-center w-full">
       
       <!-- Left Content Column -->
       <div class="lg:col-span-7 space-y-6">
         
-        <!-- Live Badge + Countdown Pill -->
-        <div class="flex flex-wrap items-center gap-3">
-          <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-xs font-bold uppercase tracking-widest text-white">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            AWS Student Community Day 2024
-          </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/20 text-xs font-semibold text-white/90 border border-white/20">
-            <i data-lucide="calendar" class="w-3.5 h-3.5 text-orange-200"></i> Feb 3, 2024
-          </span>
+        <!-- Pill Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-xs font-bold uppercase tracking-widest text-white/90">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          AWS STUDENT COMMUNITY DAY 2024
         </div>
 
-        <!-- Main Structured Heading -->
-        <div class="space-y-2">
-          <h1 class="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight text-white leading-[1.05]">
-            BUILD THE FUTURE <br />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-100 to-amber-200">
-              IN THE CLOUD
-            </span>
-          </h1>
-          <p class="text-base sm:text-xl font-medium text-white/90 max-w-xl leading-relaxed pt-2">
-            Organized by <strong class="text-white underline decoration-white/40">AWS Cloud Club, IGDTUW</strong>. Connect with industry leaders, level up your architecture skills, and supercharge your cloud journey.
-          </p>
+        <!-- Hero Title (Matched layout) -->
+        <h1 class="text-5xl sm:text-7xl font-black text-white tracking-tight leading-[1.02]">
+          WELCOME TO <br />
+          AWS STUDENT <br />
+          COMMUNITY DAY
+        </h1>
+
+        <!-- Subtitle & Date -->
+        <div class="space-y-1 text-white/90 text-base sm:text-lg font-normal leading-relaxed">
+          <p>Organized by AWS Cloud Club, IGDTUW.</p>
+          <p class="font-semibold text-white">3rd Feb 2024 • IGDTUW, Delhi</p>
         </div>
 
-        <!-- Action CTAs -->
+        <!-- Action Buttons -->
         <div class="flex flex-wrap gap-4 pt-4">
-          <button onclick="openModal('reg-modal')" class="border-2 border-white bg-white text-orange-600 px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-transparent hover:text-white transition duration-300 shadow-xl">
-            Claim Free Pass
+          <button onclick="openModal('reg-modal')" class="border-2 border-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition duration-300">
+            Register Now
           </button>
-          <a href="#agenda" class="glass-pill px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white/30 transition flex items-center gap-2">
-            <i data-lucide="clock" class="w-4 h-4"></i> View Agenda
+          <a href="#about" class="glass-pill px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white/30 transition flex items-center gap-2">
+            Learn More <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </a>
         </div>
-
-        <!-- Key Quick Stats -->
-        <div class="pt-8 grid grid-cols-3 gap-4 border-t border-white/20 max-w-lg">
-          <div>
-            <div class="text-2xl sm:text-3xl font-black text-white">250+</div>
-            <div class="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Attendees</div>
-          </div>
-          <div>
-            <div class="text-2xl sm:text-3xl font-black text-white">9+</div>
-            <div class="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Tech Sessions</div>
-          </div>
-          <div>
-            <div class="text-2xl sm:text-3xl font-black text-white">100%</div>
-            <div class="text-[11px] font-semibold text-white/80 uppercase tracking-wider">Free Access</div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- Right Column: Interactive Graphic & Animated AWS Cloud Element -->
-      <div class="lg:col-span-5 flex justify-center relative">
-        <!-- Glowing Halo Ring behind floating cloud -->
-        <div class="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-amber-300/40 to-orange-400/20 blur-2xl animate-pulse-glow"></div>
-
-        <!-- Animated AWS Creative Card -->
-        <div class="glass-card p-8 rounded-3xl relative z-10 w-full max-w-md border border-white/40 shadow-2xl backdrop-blur-2xl flex flex-col items-center text-center animate-float">
+      <!-- Right Column: Stats Display Container (Matched Screenshot Glass Card Grid) -->
+      <div class="lg:col-span-5 relative">
+        <div class="glass-card p-6 sm:p-8 rounded-[2.5rem] grid grid-cols-2 gap-4 animate-float">
           
-          <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-white/30 to-white/10 border border-white/50 flex items-center justify-center mb-6 shadow-inner relative group">
-            <i data-lucide="cloud-lightning" class="w-12 h-12 text-white"></i>
-            <span class="absolute -top-2 -right-2 bg-emerald-400 text-orange-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow">Live</span>
+          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1">250+</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Attendees</div>
           </div>
 
-          <h3 class="text-xl font-extrabold text-white mb-2">AWS Cloud Innovation</h3>
-          <p class="text-xs text-white/85 leading-relaxed mb-6">
-            Empowering the next generation of builders with hands-on serverless architecture, DevOps, and Generative AI on AWS.
-          </p>
-
-          <!-- Interactive Live Signal Chip -->
-          <div class="w-full glass-pill p-3 rounded-xl flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2">
-              <i data-lucide="map-pin" class="w-4 h-4 text-orange-200"></i>
-              <span class="font-medium text-white/90">IGDTUW Auditorium</span>
-            </div>
-            <span class="font-bold text-white uppercase text-[10px] bg-white/20 px-2 py-1 rounded-md">Delhi</span>
+          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1">9</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Talks</div>
           </div>
+
+          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1">2</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Activities</div>
+          </div>
+
+          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1">10+</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Professionals</div>
+          </div>
+
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- CREATIVE FEATURE 1: INTERACTIVE AGENDA / TIMELINE -->
+  <!-- CREATIVE FEATURE 1: INTERACTIVE AGENDA TIMELINE -->
   <section id="agenda" class="py-24 px-6 max-w-7xl mx-auto w-full border-t border-white/15">
     <div class="text-center max-w-2xl mx-auto mb-12">
-      <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-4 inline-block">Schedule Overview</span>
+      <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-3 inline-block">Interactive Schedule</span>
       <h2 class="text-3xl sm:text-5xl font-extrabold text-white">Event Agenda</h2>
     </div>
 
     <div class="max-w-4xl mx-auto space-y-4">
-      <div class="glass-card p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white/90">09:30 AM</span>
+          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">09:30 AM</span>
           <div>
             <h4 class="font-bold text-base text-white">Check-in & Welcome Keynote</h4>
-            <p class="text-xs text-white/75">Opening remarks by AWS Cloud Club Team & IGDTUW Faculty</p>
+            <p class="text-xs text-white/80">Opening remarks by AWS Cloud Club Team & Faculty</p>
           </div>
         </div>
         <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Main Stage</span>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white/90">10:30 AM</span>
+          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">10:30 AM</span>
           <div>
             <h4 class="font-bold text-base text-white">Two Journeys, One Cloud: Career Pathways</h4>
-            <p class="text-xs text-white/75">Jen Looper & Aditi Sawhney (AWS)</p>
+            <p class="text-xs text-white/80">Jen Looper & Aditi Sawhney (AWS)</p>
           </div>
         </div>
         <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Career Talk</span>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white/90">01:00 PM</span>
+          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">01:00 PM</span>
           <div>
             <h4 class="font-bold text-base text-white">Networking & Feast Lunch</h4>
-            <p class="text-xs text-white/75">Connect with speakers, peers, and mentors over lunch</p>
+            <p class="text-xs text-white/80">Connect with speakers, peers, and mentors over lunch</p>
           </div>
         </div>
         <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Dining Hall</span>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white/90">02:30 PM</span>
+          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">02:30 PM</span>
           <div>
             <h4 class="font-bold text-base text-white">Generative AI & CI/CD Cloud Pipelines</h4>
-            <p class="text-xs text-white/75">Kristine Howard & Dipali (Natwest & AWS Hero)</p>
+            <p class="text-xs text-white/80">Kristine Howard & Dipali (Natwest & AWS Hero)</p>
           </div>
         </div>
         <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Tech Deep-Dive</span>
@@ -268,29 +228,29 @@
     </div>
   </section>
 
-  <!-- CREATIVE FEATURE 2: INTERACTIVE CLOUD QUIZ WIDGET -->
+  <!-- CREATIVE FEATURE 2: CLOUD PATH QUIZ -->
   <section id="quiz" class="py-24 px-6 max-w-4xl mx-auto w-full border-t border-white/15">
-    <div class="glass-card p-8 sm:p-12 rounded-3xl text-center relative overflow-hidden">
-      <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-4 inline-block">Interactive Quiz</span>
+    <div class="glass-card p-8 sm:p-12 rounded-[2.5rem] text-center relative overflow-hidden">
+      <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-3 inline-block">Find Your Track</span>
       <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Which AWS Path Fits You Best?</h2>
-      <p class="text-xs sm:text-sm text-white/80 mb-8 max-w-xl mx-auto">Click your favorite tech domain to reveal your recommended track at the Community Day!</p>
+      <p class="text-xs sm:text-sm text-white/85 mb-8 max-w-xl mx-auto">Select a field below to discover session recommendations for the event:</p>
 
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <button onclick="showQuizResult('DevOps & CI/CD Path')" class="glass-card p-4 rounded-2xl hover:bg-white/25 transition text-xs font-bold text-white">
+        <button onclick="showQuizResult('DevOps & CI/CD Track', 'Empowering Future Innovators: Crafting CI/CD pipeline with AWS by Dipali')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
           🚀 DevOps
         </button>
-        <button onclick="showQuizResult('Generative AI & ML Path')" class="glass-card p-4 rounded-2xl hover:bg-white/25 transition text-xs font-bold text-white">
+        <button onclick="showQuizResult('Generative AI Track', 'Generative AI - Asking for a friend by Kristine Howard')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
           🤖 AI & ML
         </button>
-        <button onclick="showQuizResult('Cloud Security & IAM Path')" class="glass-card p-4 rounded-2xl hover:bg-white/25 transition text-xs font-bold text-white">
+        <button onclick="showQuizResult('Security Track', 'AWS Security with Identity and Access Management by Gargee Bhatnagar')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
           🛡️ Security
         </button>
-        <button onclick="showQuizResult('Cloud Architecture Path')" class="glass-card p-4 rounded-2xl hover:bg-white/25 transition text-xs font-bold text-white">
+        <button onclick="showQuizResult('Cloud Foundations Track', 'Unlocking and Mastering the Cloud Basics by Varsha Verma')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
           ☁️ Architecture
         </button>
       </div>
 
-      <div id="quiz-result" class="hidden glass-pill p-4 rounded-2xl text-sm font-bold text-white border border-white/40"></div>
+      <div id="quiz-result" class="hidden glass-pill p-5 rounded-2xl text-xs sm:text-sm font-bold text-white border border-white/40"></div>
     </div>
   </section>
 
@@ -315,25 +275,25 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <div class="text-3xl mb-4">🎤</div>
         <h4 class="font-bold text-lg text-white mb-2">Speaker Sessions</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Immerse yourself in enlightening talks by certified industry experts, expanding your cloud knowledge! 🗣🔍</p>
+        <p class="text-xs text-white/80 leading-relaxed">Immerse yourself in enlightening talks by certified industry experts, expanding your cloud knowledge!</p>
       </div>
 
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <div class="text-3xl mb-4">🤝</div>
         <h4 class="font-bold text-lg text-white mb-2">Networking</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Connect with a tribe of like-minded individuals, forging bonds that will last a lifetime! 🌐👥</p>
+        <p class="text-xs text-white/80 leading-relaxed">Connect with a tribe of like-minded individuals, forging bonds that will last a lifetime!</p>
       </div>
 
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <div class="text-3xl mb-4">🍔</div>
         <h4 class="font-bold text-lg text-white mb-2">Feast Alert</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Indulge in a spread of delicious team lunches and evening snacks that will leave your taste buds tingling! 🍕🍇</p>
+        <p class="text-xs text-white/80 leading-relaxed">Indulge in a spread of delicious team lunches and evening snacks that will leave your taste buds tingling!</p>
       </div>
 
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <div class="text-3xl mb-4">🎁</div>
         <h4 class="font-bold text-lg text-white mb-2">Goodies Galore</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Wait for it... amazing surprises that will make your day truly unforgettable! 🎁🤩</p>
+        <p class="text-xs text-white/80 leading-relaxed">Wait for it... amazing surprises that will make your day truly unforgettable!</p>
       </div>
     </div>
   </section>
@@ -349,7 +309,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Jen Looper</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">Head of Academic Advocacy at AWS</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Two Journeys, One Cloud: Career Pathways
         </div>
       </div>
@@ -357,7 +317,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Aditi Sawhney</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">Senior Digital Marketing Manager at AWS</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Two Journeys, One Cloud: Career Pathways
         </div>
       </div>
@@ -365,7 +325,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Dipali</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">Vice President of Data Engineering at Natwest Group & AWS Hero</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Empowering Future Innovators: Crafting CI/CD pipeline with AWS
         </div>
       </div>
@@ -373,7 +333,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Varsha Verma</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">Senior Cloud Ops Engineer at Accenture</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Unlocking and Mastering the Cloud Basics
         </div>
       </div>
@@ -381,7 +341,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Kristine Howard</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">AWS Developer Relations and Advocacy team for Asia-Pacific</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Generative AI - Asking for a friend
         </div>
       </div>
@@ -389,7 +349,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Gargee Bhatnagar</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">Consultant at Capgemini and AWS Community Builder</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> AWS Security with Identity and Access Management
         </div>
       </div>
@@ -397,7 +357,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Rashmi Nambiar</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">Principal Marketing Manager, AWS</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Making the right moves in a professional landscape
         </div>
       </div>
@@ -405,7 +365,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Payal Gupta</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">Cloud Engineer at Dremio</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Re-Invent recap
         </div>
       </div>
@@ -413,7 +373,7 @@
       <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
         <h3 class="text-xl font-bold text-white mb-1">Rajani</h3>
         <p class="text-xs font-semibold text-white/80 mb-4">AWS Community Builder</p>
-        <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs text-white/90">
+        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
           <strong class="block text-white mb-1">Topic:</strong> Climbing the Cloud Ladder: Your AWS Career Guide
         </div>
       </div>
@@ -496,7 +456,7 @@
           Kashmere Gate, Delhi
         </p>
       </div>
-      <button onclick="alert('Opening map location...')" class="border-2 border-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition">
+      <button onclick="alert('Opening location map...')" class="border-2 border-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition">
         Get Directions
       </button>
     </div>
@@ -641,10 +601,10 @@
       closeModal('reg-modal');
     }
 
-    function showQuizResult(pathName) {
+    function showQuizResult(track, session) {
       const resDiv = document.getElementById('quiz-result');
       resDiv.classList.remove('hidden');
-      resDiv.innerHTML = `Recommended for You: <span class="text-amber-200 font-black">${pathName}</span> — Make sure to attend the Keynote & Afternoon Deep-Dive sessions!`;
+      resDiv.innerHTML = `Recommended for You: <span class="underline decoration-white/50">${track}</span> — Recommended Session: <span class="font-black text-amber-200">"${session}"</span>`;
     }
   </script>
 </body>
