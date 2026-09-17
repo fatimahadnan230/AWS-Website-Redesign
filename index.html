@@ -3,375 +3,599 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AWS Student Community Day | Hub</title>
+  <title>AWS Student Community Day 2024 | IGDTUW</title>
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            awsnavy: '#232F3E',
-            awsnavydark: '#19212C',
+            awsnavy: '#1A2332',
             awsorange: '#FF9900',
-            awsorangedark: '#EC7211',
-            awslightbg: '#FAFAFA',
+            warmOrange: '#FF6B00',
+            warmYellow: '#FFA800',
           },
           boxShadow: {
-            'fancy': '0 20px 30px -10px rgba(0, 0, 0, 0.07), 0 10px 15px -5px rgba(0, 0, 0, 0.03)',
-            'orangeGlow': '0 10px 25px -5px rgba(255, 153, 0, 0.3)',
+            'glow-orange': '0 15px 35px -5px rgba(255, 107, 0, 0.4)',
+            'glass': '0 8px 32px 0 rgba(255, 255, 255, 0.25)',
+            'card-light': '0 10px 30px rgba(0,0,0,0.05)',
           }
         }
       }
     }
   </script>
+
   <style>
-    .glass-light {
-      background: rgba(255, 255, 255, 0.85);
+    /* Gradient Aesthetic inspired by user image */
+    .hero-gradient {
+      background: radial-gradient(circle at 70% 30%, #FFA800 0%, #FF6B00 45%, #E04800 100%);
+    }
+
+    .mesh-gradient-bg {
+      background: linear-gradient(135deg, #FFF9F2 0%, #FFF3E5 50%, #FFE9D6 100%);
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
-    .gradient-light-text {
-      background: linear-gradient(135deg, #232F3E 0%, #19212C 40%, #EC7211 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+
+    .glass-card-white {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
   </style>
 </head>
-<body class="bg-awslightbg text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-awsorange selection:text-white">
+<body class="bg-white text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-warmOrange selection:text-white">
 
-  <!-- Soft Ambient Glow Backgrounds -->
-  <div class="fixed top-[-5%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-tr from-amber-200/40 via-orange-100/30 to-slate-100/20 blur-3xl rounded-full pointer-events-none -z-10"></div>
+  <!-- HERO SECTION WITH WARM GRADIENT BACKGROUND -->
+  <div id="home" class="hero-gradient text-white relative overflow-hidden min-h-screen flex flex-col justify-between">
+    
+    <!-- Ambient Floating Light Orbs -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 right-10 w-80 h-80 bg-yellow-300/30 rounded-full blur-3xl pointer-events-none"></div>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-50 glass-light border-b border-slate-200/80 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="bg-awsnavy text-awsorange font-black px-3 py-1.5 rounded-xl text-xs tracking-wider shadow-sm flex items-center gap-1">
-          <span>AWS</span>
-          <span class="text-white font-light">|</span>
-          <span class="text-white">STUDENT</span>
-        </div>
-        <span class="font-black text-slate-900 tracking-tight text-base sm:text-lg">Community Day</span>
-      </div>
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <!-- Logo -->
+        <a href="#home" class="flex items-center gap-3 group">
+          <div class="bg-white/20 border border-white/40 p-2 rounded-2xl backdrop-blur-md group-hover:bg-white/30 transition">
+            <i data-lucide="cloud" class="w-6 h-6 text-white"></i>
+          </div>
+          <div>
+            <span class="font-black text-lg tracking-tight block leading-none">AWS Community Day</span>
+            <span class="text-[10px] font-bold text-white/80 uppercase tracking-widest">IGDTUW Chapter</span>
+          </div>
+        </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-xs font-bold text-slate-600 uppercase tracking-widest">
-        <a href="#tracks" class="hover:text-awsorangedark transition">Tracks</a>
-        <a href="#ama" class="hover:text-awsorangedark transition">AMA Lounge</a>
-        <a href="#ideas" class="hover:text-awsorangedark transition">Idea Box</a>
-        <a href="#certificate" class="hover:text-awsorangedark transition">Digital Pass</a>
-      </nav>
+        <!-- Nav Links -->
+        <nav class="hidden md:flex items-center gap-8 text-xs font-black uppercase tracking-widest text-white/90">
+          <a href="#home" class="hover:text-yellow-200 transition">Home</a>
+          <a href="#about" class="hover:text-yellow-200 transition">About</a>
+          <a href="#speakers" class="hover:text-yellow-200 transition">Speakers</a>
+          <a href="#sponsors" class="hover:text-yellow-200 transition">Sponsors</a>
+          <a href="#team" class="hover:text-yellow-200 transition">Team</a>
+          <a href="#venue" class="hover:text-yellow-200 transition">Venue</a>
+          <a href="#faqs" class="hover:text-yellow-200 transition">FAQs</a>
+        </nav>
 
-      <div class="flex items-center gap-3">
-        <!-- Live Switcher -->
-        <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full shadow-inner">
-          <span class="text-[10px] font-extrabold text-slate-500 uppercase">Live Day</span>
-          <button id="mode-toggle" onclick="toggleLiveMode()" class="w-8 h-4 bg-slate-300 rounded-full relative transition-colors focus:outline-none">
-            <div id="toggle-circle" class="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform shadow-sm"></div>
+        <!-- CTA & Mobile Toggle -->
+        <div class="flex items-center gap-3">
+          <button onclick="openModal('reg-modal')" class="bg-white text-warmOrange font-black px-5 py-2.5 rounded-full text-xs uppercase tracking-wider shadow-lg hover:bg-yellow-100 transition transform hover:-translate-y-0.5">
+            Register Now
           </button>
         </div>
+      </div>
+    </header>
 
-        <button onclick="openModal('reg-modal')" class="bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-extrabold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-orangeGlow hover:shadow-lg transition">
-          Claim Ticket
-        </button>
+    <!-- Hero Body -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 my-auto relative z-10 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-12">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold uppercase tracking-wider mb-6">
+          <i data-lucide="calendar" class="w-4 h-4"></i> 3rd Feb 2024 • IGDTUW, Delhi
+        </div>
+        
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none mb-6 text-white drop-shadow-sm">
+          AWS STUDENT <br />
+          <span class="text-yellow-200">COMMUNITY DAY</span>
+        </h1>
+
+        <p class="text-white/90 text-base sm:text-lg mb-8 leading-relaxed font-medium max-w-xl">
+          Organized by AWS Cloud Club, IGDTUW. Join fellow student builders, industry leads, and AWS experts for an inspiring day of learning and cloud innovation.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <button onclick="openModal('reg-modal')" class="bg-slate-900 text-white hover:bg-black font-black px-8 py-4 rounded-full text-sm shadow-2xl transition uppercase tracking-wider flex items-center justify-center gap-2">
+            Register Ticket <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+          <a href="#about" class="glass-card hover:bg-white/30 text-white font-bold px-8 py-4 rounded-full text-sm transition flex items-center justify-center border border-white/40">
+            Learn More
+          </a>
+        </div>
+      </div>
+
+      <!-- Live Interactive Stats Counter Card -->
+      <div class="w-full md:w-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/40 shadow-2xl grid grid-cols-2 gap-6 min-w-[300px] sm:min-w-[360px]">
+          <div class="text-center p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20">
+            <div class="text-3xl sm:text-4xl font-black text-white">250+</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-wider mt-1">Attendees</div>
+          </div>
+          <div class="text-center p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20">
+            <div class="text-3xl sm:text-4xl font-black text-yellow-200">9</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-wider mt-1">Expert Talks</div>
+          </div>
+          <div class="text-center p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20">
+            <div class="text-3xl sm:text-4xl font-black text-yellow-200">2</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-wider mt-1">Activities</div>
+          </div>
+          <div class="text-center p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20">
+            <div class="text-3xl sm:text-4xl font-black text-white">10+</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-wider mt-1">Professionals</div>
+          </div>
+        </div>
       </div>
     </div>
-  </header>
 
-  <!-- Live Mode Banner -->
-  <div id="live-cockpit" class="hidden bg-gradient-to-r from-amber-400 via-awsorange to-orange-500 text-slate-900 py-3 px-4 font-bold text-xs sm:text-sm shadow-md">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-      <div class="flex items-center gap-2 font-black uppercase tracking-wider">
-        <span class="w-2.5 h-2.5 bg-red-600 rounded-full animate-ping"></span>
-        Main Auditorium Stage Live
-      </div>
-      <span class="font-extrabold text-slate-900">Deploying Serverless Architectures on AWS Free Tier</span>
-      <button class="bg-awsnavy text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow hover:bg-awsnavydark transition">Watch Broadcast</button>
+    <!-- Curved Wave Transition -->
+    <div class="w-full overflow-hidden leading-none">
+      <svg class="relative block w-full h-12 sm:h-20 text-white" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.92,152.47,130.8,223.77,117.84,256.46,111.89,289.47,88.4,321.39,56.44Z" fill="currentColor"></path>
+      </svg>
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <section class="py-16 sm:py-24 px-4 max-w-7xl mx-auto text-center relative">
-    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100/80 border border-orange-200 text-awsorangedark text-xs font-black uppercase tracking-widest mb-6 shadow-sm">
-      <i data-lucide="sparkles" class="w-4 h-4 text-awsorange"></i> Official AWS Student Community Event
-    </div>
-
-    <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-none mb-6">
-      RETHINK HOW YOU BUILD <br />
-      <span class="gradient-light-text">IN THE CLOUD.</span>
-    </h1>
-
-    <p class="max-w-2xl mx-auto text-slate-600 text-base sm:text-lg mb-8 font-normal leading-relaxed">
-      A zero-cost, student-driven conference designed to teach hands-on DevOps, Cloud Security, and Generative AI on AWS through live workshops.
-    </p>
-
-    <!-- Fancy Light Badges -->
-    <div class="flex flex-wrap justify-center gap-3 mb-10">
-      <span class="px-4 py-2 rounded-2xl bg-white text-slate-700 text-xs font-bold shadow-fancy border border-slate-200/70 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Beginner Friendly Labs
-      </span>
-      <span class="px-4 py-2 rounded-2xl bg-white text-slate-700 text-xs font-bold shadow-fancy border border-slate-200/70 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-awsorange"></span> 100% Free Sandbox Credits
-      </span>
-      <span class="px-4 py-2 rounded-2xl bg-white text-slate-700 text-xs font-bold shadow-fancy border border-slate-200/70 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Resume & PR Reviews
-      </span>
-    </div>
-
-    <div class="flex flex-col sm:flex-row justify-center gap-4">
-      <button onclick="openModal('reg-modal')" class="bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-extrabold px-8 py-3.5 rounded-2xl text-sm shadow-orangeGlow transition">
-        Claim Free Ticket
-      </button>
-      <a href="#tracks" class="bg-white hover:bg-slate-50 text-slate-800 font-bold px-8 py-3.5 rounded-2xl text-sm border border-slate-200 shadow-sm transition">
-        View Schedule
-      </a>
-    </div>
-  </section>
-
-  <!-- Skill Pathfinder & Agenda -->
-  <section id="tracks" class="py-16 bg-white border-y border-slate-200/80">
+  <!-- ABOUT SECTION -->
+  <section id="about" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <span class="text-xs font-extrabold text-awsorangedark uppercase tracking-wider bg-orange-50 border border-orange-200 px-3 py-1 rounded-full">Interactive Agenda</span>
-        <h2 class="text-3xl font-black text-slate-900 mt-3 mb-2">Skill Pathfinder Tracks</h2>
-        <p class="text-slate-500 text-xs sm:text-sm">Filter workshops based on your target learning goal.</p>
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest text-warmOrange bg-orange-50 border border-orange-200 px-3.5 py-1.5 rounded-full">Overview</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-4 mb-4">About AWS Student Community Day 2024</h2>
+        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+          Welcome to the AWS Student Community Day, a gathering aimed at exploring the latest trends, innovations, and best practices in the world of cloud computing offered by Amazon Web Services (AWS).
+        </p>
       </div>
 
-      <!-- Filter Buttons -->
-      <div class="flex flex-wrap justify-center gap-3 mb-10">
-        <button onclick="applyFilter('all')" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-extrabold bg-awsnavy text-white shadow-sm">All Workshops</button>
-        <button onclick="applyFilter('beginner')" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200">Cloud Fundamentals</button>
-        <button onclick="applyFilter('devops')" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200">DevOps & Containers</button>
-        <button onclick="applyFilter('ai')" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200">AI / ML Engineering</button>
+      <!-- Feature Grid -->
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-card-light transition group hover:-translate-y-1">
+          <div class="w-12 h-12 bg-orange-500/10 text-warmOrange rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-warmOrange group-hover:text-white transition">🎤</div>
+          <h3 class="font-extrabold text-slate-900 text-lg mb-2">Speaker Sessions</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Immerse yourself in enlightening talks by certified industry experts, expanding your cloud knowledge!</p>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-card-light transition group hover:-translate-y-1">
+          <div class="w-12 h-12 bg-orange-500/10 text-warmOrange rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-warmOrange group-hover:text-white transition">🤝</div>
+          <h3 class="font-extrabold text-slate-900 text-lg mb-2">Networking</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Connect with a tribe of like-minded individuals, forging bonds that will last a lifetime!</p>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-card-light transition group hover:-translate-y-1">
+          <div class="w-12 h-12 bg-orange-500/10 text-warmOrange rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-warmOrange group-hover:text-white transition">🍔</div>
+          <h3 class="font-extrabold text-slate-900 text-lg mb-2">Feast Alert</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Indulge in a spread of delicious team lunches and evening snacks that will leave your taste buds tingling!</p>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-card-light transition group hover:-translate-y-1">
+          <div class="w-12 h-12 bg-orange-500/10 text-warmOrange rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-warmOrange group-hover:text-white transition">🎁</div>
+          <h3 class="font-extrabold text-slate-900 text-lg mb-2">Goodies Galore</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Wait for it... amazing surprises that will make your day truly unforgettable!</p>
+        </div>
       </div>
 
-      <!-- Agenda Cards Grid -->
-      <div class="grid md:grid-cols-3 gap-6" id="agenda-grid">
+    </div>
+  </section>
+
+  <!-- SPEAKERS SECTION -->
+  <section id="speakers" class="py-20 mesh-gradient-bg border-y border-orange-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest text-warmOrange bg-white border border-orange-200 px-3.5 py-1.5 rounded-full shadow-sm">Lineup</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-4 mb-2">Featured Speakers</h2>
+        <p class="text-slate-600 text-xs sm:text-sm">Learn directly from cloud leaders, AWS Heroes, and industry pioneers.</p>
+      </div>
+
+      <!-- Speakers Grid -->
+      <div class="grid md:grid-cols-3 gap-8">
         
-        <!-- Card 1 -->
-        <div class="agenda-card bg-slate-50 border border-slate-200/80 rounded-2xl p-6 transition shadow-sm hover:shadow-fancy hover:border-awsorange flex flex-col justify-between" data-category="beginner">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-[10px] font-black uppercase text-emerald-700 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-md">Fundamentals</span>
-              <span class="text-xs font-bold text-slate-400">10:00 AM IST</span>
-            </div>
-            <h3 class="text-base font-bold text-slate-900 mb-2">Getting Started with AWS Free Tier</h3>
-            <p class="text-xs text-slate-600 leading-relaxed mb-4">Learn how to configure budget alerts, deploy static S3 websites, and manage IAM access securely.</p>
+        <!-- Speaker 1 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">JL</div>
+          <h3 class="text-lg font-black text-slate-900">Jen Looper</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">Head of Academic Advocacy at AWS</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Two Journeys, One Cloud: Career Pathways
           </div>
-          <button onclick="bookmark(this)" class="w-full bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold py-2.5 rounded-xl border border-slate-200 transition shadow-sm">Bookmark Workshop</button>
         </div>
 
-        <!-- Card 2 -->
-        <div class="agenda-card bg-slate-50 border border-slate-200/80 rounded-2xl p-6 transition shadow-sm hover:shadow-fancy hover:border-awsorange flex flex-col justify-between" data-category="devops">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-[10px] font-black uppercase text-blue-700 bg-blue-100 border border-blue-300 px-2.5 py-0.5 rounded-md">DevOps Track</span>
-              <span class="text-xs font-bold text-slate-400">11:30 AM IST</span>
-            </div>
-            <h3 class="text-base font-bold text-slate-900 mb-2">Docker Microservices to AWS ECS</h3>
-            <p class="text-xs text-slate-600 leading-relaxed mb-4">Hands-on lab containerizing Python backends, writing Dockerfiles, and deploying to ECS Fargate.</p>
+        <!-- Speaker 2 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">AS</div>
+          <h3 class="text-lg font-black text-slate-900">Aditi Sawhney</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">Senior Digital Marketing Manager at AWS</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Two Journeys, One Cloud: Career Pathways
           </div>
-          <button onclick="bookmark(this)" class="w-full bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold py-2.5 rounded-xl border border-slate-200 transition shadow-sm">Bookmark Workshop</button>
         </div>
 
-        <!-- Card 3 -->
-        <div class="agenda-card bg-slate-50 border border-slate-200/80 rounded-2xl p-6 transition shadow-sm hover:shadow-fancy hover:border-awsorange flex flex-col justify-between" data-category="ai">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-[10px] font-black uppercase text-purple-700 bg-purple-100 border border-purple-300 px-2.5 py-0.5 rounded-md">AI / ML Track</span>
-              <span class="text-xs font-bold text-slate-400">02:00 PM IST</span>
-            </div>
-            <h3 class="text-base font-bold text-slate-900 mb-2">GenAI Apps with Amazon Bedrock API</h3>
-            <p class="text-xs text-slate-600 leading-relaxed mb-4">Build campus chatbots using foundation models via Boto3 SDK and prompt engineering techniques.</p>
+        <!-- Speaker 3 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">D</div>
+          <h3 class="text-lg font-black text-slate-900">Dipali</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">VP Data Engineering, Natwest Group & AWS Hero</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Empowering Future Innovators: Crafting CI/CD pipeline with AWS
           </div>
-          <button onclick="bookmark(this)" class="w-full bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold py-2.5 rounded-xl border border-slate-200 transition shadow-sm">Bookmark Workshop</button>
+        </div>
+
+        <!-- Speaker 4 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">VV</div>
+          <h3 class="text-lg font-black text-slate-900">Varsha Verma</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">Senior Cloud Ops Engineer at Accenture</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Unlocking and Mastering the Cloud Basics
+          </div>
+        </div>
+
+        <!-- Speaker 5 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">KH</div>
+          <h3 class="text-lg font-black text-slate-900">Kristine Howard</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">AWS Developer Relations & Advocacy (APAC)</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Generative AI - Asking for a friend
+          </div>
+        </div>
+
+        <!-- Speaker 6 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">GB</div>
+          <h3 class="text-lg font-black text-slate-900">Gargee Bhatnagar</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">Consultant at Capgemini & AWS Community Builder</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            AWS Security with Identity and Access Management
+          </div>
+        </div>
+
+        <!-- Speaker 7 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">RN</div>
+          <h3 class="text-lg font-black text-slate-900">Rashmi Nambiar</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">Principal Marketing Manager, AWS</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Making the right moves in a professional landscape
+          </div>
+        </div>
+
+        <!-- Speaker 8 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">PG</div>
+          <h3 class="text-lg font-black text-slate-900">Payal Gupta</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">Cloud Engineer at Dremio</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Re-Invent recap
+          </div>
+        </div>
+
+        <!-- Speaker 9 -->
+        <div class="glass-card-white rounded-3xl p-6 hover:shadow-glow-orange transition group">
+          <div class="w-16 h-16 bg-gradient-to-tr from-warmOrange to-yellow-400 text-white font-black rounded-2xl flex items-center justify-center text-xl mb-4 shadow-md">R</div>
+          <h3 class="text-lg font-black text-slate-900">Rajani</h3>
+          <p class="text-xs font-bold text-warmOrange mb-3">AWS Community Builder</p>
+          <div class="bg-orange-50/70 border border-orange-100 rounded-xl p-3 text-xs text-slate-600">
+            <span class="font-extrabold text-slate-800 block mb-1">Topic:</span>
+            Climbing the Cloud Ladder: Your AWS Career Guide
+          </div>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- Idea Box Section -->
-  <section id="ideas" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-gradient-to-br from-awsnavy to-awsnavydark text-white rounded-3xl p-8 sm:p-10 shadow-fancy">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+  <!-- SPONSORS SECTION -->
+  <section id="sponsors" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="text-xs font-black uppercase tracking-widest text-warmOrange bg-orange-50 border border-orange-200 px-3.5 py-1.5 rounded-full">Partners</span>
+      <h2 class="text-3xl font-black text-slate-900 mt-4 mb-12">Event Sponsors</h2>
+
+      <div class="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+        <div class="p-8 rounded-3xl border-2 border-slate-100 hover:border-warmOrange transition shadow-card-light">
+          <div class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-3">Title Sponsor</div>
+          <div class="text-2xl font-black text-slate-800 flex items-center justify-center gap-2">
+            <i data-lucide="award" class="w-6 h-6 text-warmOrange"></i> AWS Cloud Clubs
+          </div>
+        </div>
+        <div class="p-8 rounded-3xl border-2 border-slate-100 hover:border-warmOrange transition shadow-card-light">
+          <div class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-3">Ticketing Sponsor</div>
+          <div class="text-2xl font-black text-slate-800 flex items-center justify-center gap-2">
+            <i data-lucide="ticket" class="w-6 h-6 text-warmOrange"></i> Community Platform
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORGANIZING TEAM SECTION -->
+  <section id="team" class="py-20 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest text-warmOrange bg-white border border-slate-200 px-3.5 py-1.5 rounded-full shadow-sm">Organizers</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-4 mb-2">Meet Our Team</h2>
+        <p class="text-slate-500 text-xs sm:text-sm">The student leads and volunteers behind AWS Cloud Club, IGDTUW.</p>
+      </div>
+
+      <!-- Lead Section -->
+      <div class="flex justify-center mb-10">
+        <div class="bg-white border-2 border-warmOrange p-6 rounded-3xl text-center min-w-[220px] shadow-lg">
+          <div class="w-14 h-14 bg-warmOrange text-white font-black rounded-full flex items-center justify-center text-lg mx-auto mb-3">AG</div>
+          <h3 class="font-extrabold text-slate-900">Arushi Garg</h3>
+          <span class="text-xs font-bold text-warmOrange uppercase tracking-wider">Captain</span>
+        </div>
+      </div>
+
+      <!-- Core Team Grid -->
+      <div class="mb-12">
+        <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 text-center mb-6">Core Committee</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto text-center">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-xs font-bold text-slate-800 shadow-sm">Soumya</div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-xs font-bold text-slate-800 shadow-sm">Priyanka</div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-xs font-bold text-slate-800 shadow-sm">Sakshi</div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 text-xs font-bold text-slate-800 shadow-sm">Shreya</div>
+        </div>
+      </div>
+
+      <!-- Volunteers Grid -->
+      <div>
+        <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 text-center mb-6">Volunteers</h3>
+        <div class="flex flex-wrap justify-center gap-2.5 max-w-4xl mx-auto">
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Lavanaya</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Charu</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Jyati</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Garima</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Ananya</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Aishwarya</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Shradha</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Gayatri</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Anamika</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Arushree</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Tvesha</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Anjali</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Aarushi</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Aniketa</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Bhavya</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Jhanvi</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Sania</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Saloni</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Tanisha</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Sneha</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Avni</span>
+          <span class="px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm">Payal</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VENUE SECTION -->
+  <section id="venue" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-slate-900 to-awsnavy text-white rounded-3xl p-8 sm:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
-          <span class="text-xs font-extrabold uppercase text-awsorange tracking-widest">Crowdsourced Backlog</span>
-          <h2 class="text-2xl sm:text-3xl font-black mt-1">Submit & Upvote Community Projects</h2>
+          <span class="text-xs font-black uppercase tracking-widest text-yellow-300">Location</span>
+          <h2 class="text-3xl font-black mt-2 mb-4">Auditorium</h2>
+          <p class="text-slate-300 text-sm leading-relaxed max-w-md">
+            Indira Gandhi Delhi Technical University for Women (IGDTUW), <br />
+            Kashmere Gate, Delhi
+          </p>
         </div>
-        <button onclick="submitIdeaPrompt()" class="bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-extrabold text-xs px-4 py-3 rounded-xl shadow-md transition uppercase tracking-wider">
-          + Submit New Idea
-        </button>
-      </div>
-
-      <div class="space-y-3" id="idea-container">
-        <!-- Idea Item 1 -->
-        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 flex items-center justify-between gap-4">
-          <div class="flex items-center gap-4">
-            <button onclick="upvote(this)" class="bg-slate-900 border border-slate-700 hover:border-awsorange text-white px-3 py-2 rounded-xl flex flex-col items-center transition min-w-[50px]">
-              <i data-lucide="chevron-up" class="w-4 h-4 text-awsorange"></i>
-              <span class="text-xs font-extrabold vote-count">142</span>
-            </button>
-            <div>
-              <h4 class="text-sm font-bold text-white mb-0.5">Weekend Hackathon: Serverless Apps</h4>
-              <p class="text-xs text-slate-300">48-hour sprint building Lambda & DynamoDB tools for campus workflows.</p>
-            </div>
-          </div>
-          <span class="hidden sm:inline-block text-[10px] font-bold bg-slate-900 text-awsorange border border-awsorange/30 px-3 py-1 rounded-full uppercase">Hackathon</span>
-        </div>
-
-        <!-- Idea Item 2 -->
-        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 flex items-center justify-between gap-4">
-          <div class="flex items-center gap-4">
-            <button onclick="upvote(this)" class="bg-slate-900 border border-slate-700 hover:border-awsorange text-white px-3 py-2 rounded-xl flex flex-col items-center transition min-w-[50px]">
-              <i data-lucide="chevron-up" class="w-4 h-4 text-awsorange"></i>
-              <span class="text-xs font-extrabold vote-count">98</span>
-            </button>
-            <div>
-              <h4 class="text-sm font-bold text-white mb-0.5">AWS Cloud Practitioner Study Group</h4>
-              <p class="text-xs text-slate-300">Weekly peer study sessions with mock exam reviews and vouchers.</p>
-            </div>
-          </div>
-          <span class="hidden sm:inline-block text-[10px] font-bold bg-slate-900 text-slate-300 border border-slate-700 px-3 py-1 rounded-full uppercase">Study Group</span>
+        <div class="w-full md:w-auto">
+          <button onclick="alert('Opening Google Maps location...')" class="w-full sm:w-auto bg-warmOrange hover:bg-orange-600 text-white font-black px-8 py-4 rounded-2xl text-xs uppercase tracking-wider shadow-lg transition flex items-center justify-center gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4"></i> Get Directions
+          </button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Digital Certificate Generator -->
-  <section id="certificate" class="py-16 bg-white border-t border-slate-200/80">
-    <div class="max-w-xl mx-auto px-4 text-center">
-      <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">Verifiable Credential</span>
-      <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-3 mb-2">Digital Completion Badge</h2>
-      <p class="text-xs sm:text-sm text-slate-500 mb-6">Type your full name to generate your event badge preview.</p>
+  <!-- INTERACTIVE FAQS SECTION -->
+  <section id="faqs" class="py-20 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs font-black uppercase tracking-widest text-warmOrange bg-white border border-slate-200 px-3.5 py-1.5 rounded-full shadow-sm">Help</span>
+        <h2 class="text-3xl font-black text-slate-900 mt-4">Frequently Asked Questions</h2>
+      </div>
 
-      <input type="text" id="badge-name-input" oninput="updateBadge()" placeholder="Type your full name" class="bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm text-center font-bold text-slate-900 mb-8 focus:outline-none focus:border-awsorange w-72 shadow-inner" />
+      <div class="space-y-4">
+        
+        <!-- FAQ item -->
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition text-sm sm:text-base">
+            <span>What is AWS Cloud Club at IGDTUW?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed">
+            AWS Cloud Club at IGDTUW is an official student-led community focused on helping students learn AWS technologies, build real-world cloud applications, and network with industry professionals.
+          </div>
+        </div>
 
-      <!-- Certificate Visual Mockup -->
-      <div class="bg-gradient-to-b from-white to-amber-50/50 border-2 border-slate-900 rounded-3xl p-8 max-w-md mx-auto shadow-fancy relative overflow-hidden text-left">
-        <div class="flex justify-between items-center mb-6">
-          <div class="text-[10px] font-black tracking-widest text-awsorangedark uppercase">AWS STUDENT COMMUNITY DAY 2026</div>
-          <div class="w-6 h-6 rounded-full bg-awsnavy text-awsorange font-black text-[9px] flex items-center justify-center">AWS</div>
+        <!-- FAQ item -->
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition text-sm sm:text-base">
+            <span>How can I join AWS Cloud Club at IGDTUW?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed">
+            You can join by attending our events, filling out our member registration form, or participating in community hackathons and workshops.
+          </div>
         </div>
-        <div class="text-2xl font-black text-slate-900 mb-1 uppercase" id="badge-name-display">FATIMAH</div>
-        <p class="text-xs text-slate-600 mb-6 leading-relaxed">Has successfully participated in hands-on cloud architecture and DevOps workshops.</p>
-        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full w-fit">
-          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> Verified Credential Pass
+
+        <!-- FAQ item -->
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition text-sm sm:text-base">
+            <span>What activities does AWS Cloud Club at IGDTUW organize?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed">
+            We organize technical workshops, speaker sessions with AWS Heroes, hands-on labs, study cohorts for certifications, and Community Day events!
+          </div>
         </div>
+
+        <!-- FAQ item -->
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition text-sm sm:text-base">
+            <span>What are the benefits of joining AWS Cloud Club at IGDTUW?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed">
+            Members gain access to cloud learning resources, mentorship from certified cloud engineers, networking opportunities, and career guidance.
+          </div>
+        </div>
+
+        <!-- FAQ item -->
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition text-sm sm:text-base">
+            <span>Can beginners join AWS Cloud Club at IGDTUW?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed">
+            Absolutely! We cater to all learning levels, starting from foundational cloud concepts up to advanced serverless and AI architectures.
+          </div>
+        </div>
+
+        <!-- FAQ item -->
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition text-sm sm:text-base">
+            <span>What resources does AWS Cloud Club at IGDTUW provide for its members?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed">
+            We provide AWS Free Tier guides, code templates, presentation slide archives, exam study vouchers, and community forum support.
+          </div>
+        </div>
+
+        <!-- FAQ item -->
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition text-sm sm:text-base">
+            <span>Are there any prerequisites for joining AWS Cloud Club at IGDTUW?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed">
+            None! Just bring your interest in technology and willingness to learn.
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Registration Modal -->
-  <div id="reg-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl">
-      <button onclick="closeModal('reg-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition">
+  <!-- REGISTRATION MODAL -->
+  <div id="reg-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl">
+      <button onclick="closeModal('reg-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-800 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
-      <h3 class="text-xl font-black text-slate-900 mb-1">Student Registration</h3>
-      <p class="text-xs text-slate-500 mb-6">Reserve your zero-cost access pass.</p>
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 bg-orange-100 text-warmOrange rounded-2xl flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="ticket" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-2xl font-black text-slate-900">Event Registration</h3>
+        <p class="text-xs text-slate-500 mt-1">AWS Student Community Day 2024</p>
+      </div>
 
-      <form onsubmit="handleRegistration(e)" class="space-y-4">
+      <form onsubmit="handleRegistration(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
-          <input type="text" required placeholder="Fatimah" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-awsorange" />
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Full Name</label>
+          <input type="text" required placeholder="Fatimah Adnan" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-warmOrange" />
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Student Email (.edu or college mail)</label>
-          <input type="email" required placeholder="student@university.edu" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-awsorange" />
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
+          <input type="email" required placeholder="student@igdtuw.ac.in" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-warmOrange" />
         </div>
-        <button type="submit" class="w-full bg-gradient-to-r from-awsorange to-amber-500 hover:from-awsorangedark hover:to-awsorange text-slate-900 font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider shadow-md transition mt-2">
-          Confirm Ticket
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">College / University</label>
+          <input type="text" required placeholder="IGDTUW" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-warmOrange" />
+        </div>
+        <button type="submit" class="w-full bg-warmOrange hover:bg-orange-600 text-white font-black py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg transition">
+          Confirm Ticket Pass
         </button>
       </form>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="mt-auto border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="font-bold text-slate-700">AWS Student Community Day</div>
-      <p>© 2026 AWS Cloud Club. Designed for Student Developers.</p>
+  <!-- FOOTER -->
+  <footer class="mt-auto bg-slate-900 text-white py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <i data-lucide="cloud" class="w-5 h-5 text-warmOrange"></i>
+        <span class="font-black text-lg">AWS Cloud Club, IGDTUW</span>
+      </div>
+      <p class="text-xs text-slate-400 mb-6">© 2024 AWS Cloud Club, IGDTUW. All rights reserved.</p>
+      <div class="text-xs font-semibold text-yellow-200 bg-white/5 border border-white/10 rounded-full px-4 py-2 w-fit mx-auto">
+        ~ Designed & Developed by Fatimah Adnan ~
+      </div>
     </div>
   </footer>
 
+  <!-- SCRIPTS -->
   <script>
     lucide.createIcons();
 
-    let live = false;
-    function toggleLiveMode() {
-      live = !live;
-      const cockpit = document.getElementById('live-cockpit');
-      const circle = document.getElementById('toggle-circle');
-      if (live) {
-        cockpit.classList.remove('hidden');
-        circle.classList.add('translate-x-4');
+    function toggleFaq(button) {
+      const answer = button.nextElementSibling;
+      const icon = button.querySelector('i');
+      const isHidden = answer.classList.contains('hidden');
+
+      if (isHidden) {
+        answer.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
       } else {
-        cockpit.classList.add('hidden');
-        circle.classList.remove('translate-x-4');
+        answer.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
       }
     }
 
-    function applyFilter(cat) {
-      const cards = document.querySelectorAll('.agenda-card');
-      cards.forEach(c => {
-        if (cat === 'all' || c.dataset.category === cat) {
-          c.classList.remove('hidden');
-        } else {
-          c.classList.add('hidden');
-        }
-      });
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
     }
 
-    function bookmark(btn) {
-      btn.innerText = "Saved to Schedule ✓";
-      btn.classList.add('bg-orange-50', 'text-awsorangedark', 'border-orange-300');
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
     }
 
-    function upvote(btn) {
-      const count = btn.querySelector('.vote-count');
-      count.innerText = parseInt(count.innerText) + 1;
-      btn.classList.add('border-awsorange');
-    }
-
-    function submitIdeaPrompt() {
-      const title = prompt("Enter project or workshop idea:");
-      if (title) {
-        const container = document.getElementById('idea-container');
-        const newItem = document.createElement('div');
-        newItem.className = "bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 flex items-center justify-between gap-4";
-        newItem.innerHTML = `
-          <div class="flex items-center gap-4">
-            <button onclick="upvote(this)" class="bg-slate-900 border border-slate-700 text-white px-3 py-2 rounded-xl flex flex-col items-center transition min-w-[50px]">
-              <i data-lucide="chevron-up" class="w-4 h-4 text-awsorange"></i>
-              <span class="text-xs font-extrabold vote-count">1</span>
-            </button>
-            <div>
-              <h4 class="text-sm font-bold text-white mb-0.5">${title}</h4>
-              <p class="text-xs text-slate-300">Submitted by attendee.</p>
-            </div>
-          </div>
-          <span class="hidden sm:inline-block text-[10px] font-bold bg-slate-900 text-slate-300 border border-slate-700 px-3 py-1 rounded-full uppercase">New</span>
-        `;
-        container.prepend(newItem);
-        lucide.createIcons();
-      }
-    }
-
-    function updateBadge() {
-      const input = document.getElementById('badge-name-input').value;
-      document.getElementById('badge-name-display').innerText = input.trim() ? input.toUpperCase() : 'FATIMAH';
-    }
-
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function handleRegistration(e) {
       e.preventDefault();
-      alert("Registration Confirmed! Check your inbox.");
+      alert("Registration Successful! See you at IGDTUW.");
       closeModal('reg-modal');
     }
   </script>
