@@ -9,9 +9,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Vanilla Tilt (3D Card Effect) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <!-- Leaflet CSS & JS for Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
-    /* Gradient matching reference screenshot */
     body {
       background: radial-gradient(circle at 75% 30%, #FF9900 0%, #FF6600 45%, #CC3300 85%, #990000 100%);
       background-attachment: fixed;
@@ -19,12 +23,11 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Glassmorphism Styles */
     .glass-nav {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .glass-card {
@@ -33,17 +36,7 @@
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.22);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .glass-card-hover {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .glass-card-hover:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-4px);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      transform-style: preserve-3d;
     }
 
     .glass-pill {
@@ -52,119 +45,131 @@
       border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
-    /* Keyframe Animations */
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-12px) rotate(1.5deg); }
+    .terminal-header {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 153, 0, 0.4);
+      font-family: monospace;
     }
 
-    @keyframes pulseRing {
-      0% { transform: scale(0.95); opacity: 0.6; }
-      50% { transform: scale(1.05); opacity: 0.9; }
-      100% { transform: scale(0.95); opacity: 0.6; }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
-
-    .animate-float {
-      animation: floatSlow 6s ease-in-out infinite;
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
     }
-
-    .animate-pulse-ring {
-      animation: pulseRing 4s ease-in-out infinite;
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 4px;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-white selection:text-orange-600 relative overflow-x-hidden">
 
-  <!-- NAVBAR (Matches Screenshot Layout) -->
-  <header class="sticky top-0 z-50 glass-nav">
+  <!-- TOP ANNOUNCEMENT / COUNTDOWN BAR -->
+  <div class="bg-black/40 border-b border-white/10 px-4 py-2 text-xs font-semibold text-center flex items-center justify-center gap-4 flex-wrap">
+    <span class="inline-flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+      AWS Student Community Day IGDTUW
+    </span>
+    <span class="hidden md:inline text-white/40">|</span>
+    <div id="countdown-timer" class="font-mono text-amber-300">Calculating Event Status...</div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 glass-nav">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       
-      <!-- Checkmark Logo -->
       <a href="#home" class="flex items-center gap-3 group">
         <div class="w-10 h-10 rounded-full border-2 border-white/80 flex items-center justify-center bg-white/10 group-hover:bg-white/20 transition">
-          <i data-lucide="check" class="w-5 h-5 text-white stroke-[3]"></i>
+          <i data-lucide="cloud" class="w-5 h-5 text-white"></i>
         </div>
         <span class="font-bold text-lg text-white tracking-wide">AWS Cloud Club</span>
       </a>
 
-      <!-- Menu Items -->
-      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-white/90">
-        <a href="#home" class="hover:text-white transition">Home</a>
-        <a href="#about" class="hover:text-white transition">About</a>
-        <a href="#agenda" class="hover:text-white transition">Agenda</a>
-        <a href="#quiz" class="hover:text-white transition">Cloud Quiz</a>
-        <a href="#speakers" class="hover:text-white transition">Speakers</a>
-        <a href="#sponsors" class="hover:text-white transition">Sponsors</a>
-        <a href="#team" class="hover:text-white transition">Team</a>
-        <a href="#venue" class="hover:text-white transition">Venue</a>
-        <a href="#faqs" class="hover:text-white transition">FAQs</a>
+      <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-white/90">
+        <a href="#home" class="hover:text-amber-300 transition">Home</a>
+        <a href="#agenda" class="hover:text-amber-300 transition">Agenda</a>
+        <a href="#speakers" class="hover:text-amber-300 transition">Speakers</a>
+        <a href="#quest" class="hover:text-amber-300 transition">Cloud Quest</a>
+        <a href="#team" class="hover:text-amber-300 transition">Team</a>
+        <a href="#venue" class="hover:text-amber-300 transition">Venue</a>
+        <a href="#faqs" class="hover:text-amber-300 transition">FAQs</a>
       </nav>
 
-      <!-- Pill Action Button -->
-      <button onclick="openModal('reg-modal')" class="border-2 border-white px-7 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition duration-300">
-        Register Now
-      </button>
+      <div class="flex items-center gap-3">
+        <button onclick="toggleMyAgenda()" class="relative glass-pill p-2.5 rounded-full hover:bg-white/20 transition" title="My Saved Agenda">
+          <i data-lucide="bookmark" class="w-5 h-5 text-white"></i>
+          <span id="saved-count" class="absolute -top-1 -right-1 bg-amber-400 text-slate-900 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+        <button onclick="openModal('reg-modal')" class="border-2 border-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition duration-300">
+          Register Now
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- HERO SECTION (Recreated exact visual typography & layout from screenshot) -->
+  <!-- HERO SECTION WITH CLI TYPING ANIMATION -->
   <section id="home" class="min-h-[85vh] flex items-center py-16 px-6 max-w-7xl mx-auto w-full relative z-10">
     <div class="grid lg:grid-cols-12 gap-12 items-center w-full">
       
-      <!-- Left Content Column -->
       <div class="lg:col-span-7 space-y-6">
         
-        <!-- Pill Badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-xs font-bold uppercase tracking-widest text-white/90">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          AWS STUDENT COMMUNITY DAY 2024
+        <!-- AWS Terminal Header -->
+        <div class="terminal-header p-4 rounded-2xl shadow-2xl text-xs space-y-2">
+          <div class="flex items-center gap-2 border-b border-white/10 pb-2">
+            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+            <span class="text-white/50 ml-2">bash — aws-cli</span>
+          </div>
+          <div class="text-emerald-400 font-mono">
+            $ <span id="cli-text"></span><span class="animate-ping">_</span>
+          </div>
         </div>
 
-        <!-- Hero Title (Matched layout) -->
         <h1 class="text-5xl sm:text-7xl font-black text-white tracking-tight leading-[1.02]">
           WELCOME TO <br />
           AWS STUDENT <br />
           COMMUNITY DAY
         </h1>
 
-        <!-- Subtitle & Date -->
-        <div class="space-y-1 text-white/90 text-base sm:text-lg font-normal leading-relaxed">
-          <p>Organized by AWS Cloud Club, IGDTUW.</p>
-          <p class="font-semibold text-white">3rd Feb 2024 • IGDTUW, Delhi</p>
-        </div>
+        <p class="text-white/90 text-base sm:text-lg">
+          Organized by AWS Cloud Club, IGDTUW.<br />
+          <strong class="text-white">3rd Feb 2024 • IGDTUW, Delhi</strong>
+        </p>
 
-        <!-- Action Buttons -->
-        <div class="flex flex-wrap gap-4 pt-4">
+        <div class="flex flex-wrap gap-4 pt-2">
           <button onclick="openModal('reg-modal')" class="border-2 border-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition duration-300">
             Register Now
           </button>
-          <a href="#about" class="glass-pill px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white/30 transition flex items-center gap-2">
-            Learn More <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          <a href="#quest" class="glass-pill px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white/30 transition flex items-center gap-2">
+            Play Cloud Quest <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
           </a>
         </div>
       </div>
 
-      <!-- Right Column: Stats Display Container (Matched Screenshot Glass Card Grid) -->
+      <!-- ANIMATED STAT CARDS (Vanilla Tilt + CountUp) -->
       <div class="lg:col-span-5 relative">
-        <div class="glass-card p-6 sm:p-8 rounded-[2.5rem] grid grid-cols-2 gap-4 animate-float">
+        <div class="grid grid-cols-2 gap-4">
           
-          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
-            <div class="text-4xl sm:text-5xl font-black text-white mb-1">250+</div>
+          <div class="glass-card p-6 rounded-3xl text-center" data-tilt data-tilt-max="15">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1" id="stat-attendees">250</div>
             <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Attendees</div>
           </div>
 
-          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
-            <div class="text-4xl sm:text-5xl font-black text-white mb-1">9</div>
-            <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Talks</div>
+          <div class="glass-card p-6 rounded-3xl text-center" data-tilt data-tilt-max="15">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1" id="stat-talks">9</div>
+            <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Expert Talks</div>
           </div>
 
-          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
-            <div class="text-4xl sm:text-5xl font-black text-white mb-1">2</div>
+          <div class="glass-card p-6 rounded-3xl text-center" data-tilt data-tilt-max="15">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1" id="stat-activities">2</div>
             <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Activities</div>
           </div>
 
-          <div class="glass-card-hover p-6 rounded-2xl text-center bg-white/10 flex flex-col justify-center items-center">
-            <div class="text-4xl sm:text-5xl font-black text-white mb-1">10+</div>
+          <div class="glass-card p-6 rounded-3xl text-center" data-tilt data-tilt-max="15">
+            <div class="text-4xl sm:text-5xl font-black text-white mb-1" id="stat-profs">10</div>
             <div class="text-[11px] font-bold text-white/80 uppercase tracking-widest">Professionals</div>
           </div>
 
@@ -174,252 +179,129 @@
     </div>
   </section>
 
-  <!-- CREATIVE FEATURE 1: INTERACTIVE AGENDA TIMELINE -->
+  <!-- FEATURE 1: INTERACTIVE AGENDA & TRACK FILTER WITH BOOKMARKING -->
   <section id="agenda" class="py-24 px-6 max-w-7xl mx-auto w-full border-t border-white/15">
-    <div class="text-center max-w-2xl mx-auto mb-12">
-      <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-3 inline-block">Interactive Schedule</span>
-      <h2 class="text-3xl sm:text-5xl font-extrabold text-white">Event Agenda</h2>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+      <div>
+        <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-3 inline-block">Interactive Schedule</span>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white">Event Agenda</h2>
+      </div>
+
+      <!-- Track Filters -->
+      <div class="flex flex-wrap gap-2">
+        <button onclick="filterAgenda('all')" class="agenda-filter-btn active glass-pill px-4 py-2 rounded-xl text-xs font-bold text-white hover:bg-white/30 transition">All Tracks</button>
+        <button onclick="filterAgenda('Career')" class="agenda-filter-btn glass-pill px-4 py-2 rounded-xl text-xs font-bold text-white/70 hover:bg-white/30 transition">Career</button>
+        <button onclick="filterAgenda('DevOps')" class="agenda-filter-btn glass-pill px-4 py-2 rounded-xl text-xs font-bold text-white/70 hover:bg-white/30 transition">DevOps</button>
+        <button onclick="filterAgenda('AI')" class="agenda-filter-btn glass-pill px-4 py-2 rounded-xl text-xs font-bold text-white/70 hover:bg-white/30 transition">AI & ML</button>
+        <button onclick="filterAgenda('Security')" class="agenda-filter-btn glass-pill px-4 py-2 rounded-xl text-xs font-bold text-white/70 hover:bg-white/30 transition">Security</button>
+      </div>
     </div>
 
-    <div class="max-w-4xl mx-auto space-y-4">
-      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">09:30 AM</span>
-          <div>
-            <h4 class="font-bold text-base text-white">Check-in & Welcome Keynote</h4>
-            <p class="text-xs text-white/80">Opening remarks by AWS Cloud Club Team & Faculty</p>
-          </div>
-        </div>
-        <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Main Stage</span>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">10:30 AM</span>
-          <div>
-            <h4 class="font-bold text-base text-white">Two Journeys, One Cloud: Career Pathways</h4>
-            <p class="text-xs text-white/80">Jen Looper & Aditi Sawhney (AWS)</p>
-          </div>
-        </div>
-        <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Career Talk</span>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">01:00 PM</span>
-          <div>
-            <h4 class="font-bold text-base text-white">Networking & Feast Lunch</h4>
-            <p class="text-xs text-white/80">Connect with speakers, peers, and mentors over lunch</p>
-          </div>
-        </div>
-        <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Dining Hall</span>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-white">02:30 PM</span>
-          <div>
-            <h4 class="font-bold text-base text-white">Generative AI & CI/CD Cloud Pipelines</h4>
-            <p class="text-xs text-white/80">Kristine Howard & Dipali (Natwest & AWS Hero)</p>
-          </div>
-        </div>
-        <span class="text-xs bg-white/20 px-3 py-1 rounded-full text-white font-medium">Tech Deep-Dive</span>
-      </div>
+    <div class="max-w-4xl mx-auto space-y-4" id="agenda-list">
+      <!-- Session cards inserted via JavaScript -->
     </div>
   </section>
 
-  <!-- CREATIVE FEATURE 2: CLOUD PATH QUIZ -->
-  <section id="quiz" class="py-24 px-6 max-w-4xl mx-auto w-full border-t border-white/15">
-    <div class="glass-card p-8 sm:p-12 rounded-[2.5rem] text-center relative overflow-hidden">
-      <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-3 inline-block">Find Your Track</span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Which AWS Path Fits You Best?</h2>
-      <p class="text-xs sm:text-sm text-white/85 mb-8 max-w-xl mx-auto">Select a field below to discover session recommendations for the event:</p>
-
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <button onclick="showQuizResult('DevOps & CI/CD Track', 'Empowering Future Innovators: Crafting CI/CD pipeline with AWS by Dipali')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
-          🚀 DevOps
-        </button>
-        <button onclick="showQuizResult('Generative AI Track', 'Generative AI - Asking for a friend by Kristine Howard')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
-          🤖 AI & ML
-        </button>
-        <button onclick="showQuizResult('Security Track', 'AWS Security with Identity and Access Management by Gargee Bhatnagar')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
-          🛡️ Security
-        </button>
-        <button onclick="showQuizResult('Cloud Foundations Track', 'Unlocking and Mastering the Cloud Basics by Varsha Verma')" class="glass-card p-4 rounded-2xl hover:bg-white/30 transition text-xs font-bold text-white">
-          ☁️ Architecture
-        </button>
-      </div>
-
-      <div id="quiz-result" class="hidden glass-pill p-5 rounded-2xl text-xs sm:text-sm font-bold text-white border border-white/40"></div>
-    </div>
-  </section>
-
-  <!-- ABOUT SECTION -->
-  <section id="about" class="py-24 px-6 max-w-7xl mx-auto w-full border-t border-white/15">
-    <div class="max-w-3xl mb-16">
-      <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-6">About AWS Student Community Day 2024</h2>
-      <p class="text-white/90 text-base leading-relaxed mb-4">
-        Welcome to the AWS Student Community Day, a gathering aimed at exploring the latest trends, innovations, and best practices in the world of cloud computing offered by Amazon Web Services (AWS).
-      </p>
-      <p class="text-white/90 text-base leading-relaxed mb-4">
-        Our Student Community Day brings together experts, enthusiasts, and learners from various domains to delve into the advancements, strategies, and real-world applications of AWS cloud services.
-      </p>
-      <p class="text-white/90 text-base leading-relaxed">
-        Join us for insightful sessions, engaging discussions, hands-on workshops, and networking opportunities, all tailored to expand your knowledge and proficiency in leveraging AWS solutions.
-      </p>
-    </div>
-
-    <!-- Why Join Us Grid -->
-    <h3 class="text-2xl font-bold text-white mb-8">Why Join Us?</h3>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <div class="text-3xl mb-4">🎤</div>
-        <h4 class="font-bold text-lg text-white mb-2">Speaker Sessions</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Immerse yourself in enlightening talks by certified industry experts, expanding your cloud knowledge!</p>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <div class="text-3xl mb-4">🤝</div>
-        <h4 class="font-bold text-lg text-white mb-2">Networking</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Connect with a tribe of like-minded individuals, forging bonds that will last a lifetime!</p>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <div class="text-3xl mb-4">🍔</div>
-        <h4 class="font-bold text-lg text-white mb-2">Feast Alert</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Indulge in a spread of delicious team lunches and evening snacks that will leave your taste buds tingling!</p>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <div class="text-3xl mb-4">🎁</div>
-        <h4 class="font-bold text-lg text-white mb-2">Goodies Galore</h4>
-        <p class="text-xs text-white/80 leading-relaxed">Wait for it... amazing surprises that will make your day truly unforgettable!</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SPEAKERS SECTION -->
+  <!-- FEATURE 2: SPEAKER CARDS WITH LIVE Q&A MODAL -->
   <section id="speakers" class="py-24 px-6 max-w-7xl mx-auto w-full border-t border-white/15">
-    <div class="mb-16">
-      <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-4">Speakers</h2>
-      <p class="text-white/80 text-sm">Distinguished guests and industry experts speaking at the event.</p>
+    <div class="mb-12">
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-2">Speakers</h2>
+      <p class="text-white/80 text-sm">Click any speaker card to view their full bio or submit pre-event Q&A questions.</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Jen Looper</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">Head of Academic Advocacy at AWS</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Two Journeys, One Cloud: Career Pathways
-        </div>
-      </div>
+    <div class="grid md:grid-cols-3 gap-6" id="speakers-grid">
+      <!-- Speakers inserted via JS -->
+    </div>
+  </section>
 
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Aditi Sawhney</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">Senior Digital Marketing Manager at AWS</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Two Journeys, One Cloud: Career Pathways
-        </div>
-      </div>
+  <!-- FEATURE 3: GAMIFIED CLOUD QUEST & DIGITAL BADGE -->
+  <section id="quest" class="py-24 px-6 max-w-4xl mx-auto w-full border-t border-white/15">
+    <div class="glass-card p-8 sm:p-12 rounded-[2.5rem] relative overflow-hidden text-center">
+      <span class="glass-pill px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white mb-3 inline-block">Pre-Event Gamification</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">AWS Cloud Quest Mini-Challenge</h2>
+      <p class="text-xs sm:text-sm text-white/85 mb-8 max-w-xl mx-auto">
+        Test your cloud awareness! Answer 2 quick questions to unlock your official community attendee digital badge.
+      </p>
 
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Dipali</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">Vice President of Data Engineering at Natwest Group & AWS Hero</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Empowering Future Innovators: Crafting CI/CD pipeline with AWS
+      <div id="quest-container" class="text-left bg-black/20 p-6 rounded-2xl border border-white/15 max-w-xl mx-auto space-y-4">
+        <div id="quest-q1">
+          <label class="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">Q1: What does AWS IAM manage?</label>
+          <div class="space-y-2">
+            <button onclick="answerQuest(1, false)" class="w-full text-left glass-pill p-3 rounded-xl text-xs text-white hover:bg-white/30 transition">A) Database backups</button>
+            <button onclick="answerQuest(1, true)" class="w-full text-left glass-pill p-3 rounded-xl text-xs text-white hover:bg-white/30 transition">B) User permissions & authentication</button>
+          </div>
         </div>
-      </div>
 
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Varsha Verma</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">Senior Cloud Ops Engineer at Accenture</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Unlocking and Mastering the Cloud Basics
+        <div id="quest-q2" class="hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">Q2: Which service is fully managed serverless compute?</label>
+          <div class="space-y-2">
+            <button onclick="answerQuest(2, true)" class="w-full text-left glass-pill p-3 rounded-xl text-xs text-white hover:bg-white/30 transition">A) AWS Lambda</button>
+            <button onclick="answerQuest(2, false)" class="w-full text-left glass-pill p-3 rounded-xl text-xs text-white hover:bg-white/30 transition">B) Amazon EC2 Instance</button>
+          </div>
         </div>
-      </div>
 
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Kristine Howard</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">AWS Developer Relations and Advocacy team for Asia-Pacific</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Generative AI - Asking for a friend
-        </div>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Gargee Bhatnagar</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">Consultant at Capgemini and AWS Community Builder</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> AWS Security with Identity and Access Management
-        </div>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Rashmi Nambiar</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">Principal Marketing Manager, AWS</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Making the right moves in a professional landscape
-        </div>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Payal Gupta</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">Cloud Engineer at Dremio</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Re-Invent recap
-        </div>
-      </div>
-
-      <div class="glass-card glass-card-hover p-6 rounded-3xl transition">
-        <h3 class="text-xl font-bold text-white mb-1">Rajani</h3>
-        <p class="text-xs font-semibold text-white/80 mb-4">AWS Community Builder</p>
-        <div class="bg-black/20 p-3.5 rounded-2xl border border-white/10 text-xs text-white/90">
-          <strong class="block text-white mb-1">Topic:</strong> Climbing the Cloud Ladder: Your AWS Career Guide
+        <div id="quest-success" class="hidden text-center space-y-4 py-4">
+          <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center mx-auto text-emerald-300">
+            <i data-lucide="award" class="w-8 h-8"></i>
+          </div>
+          <h4 class="font-bold text-lg text-white">Challenge Completed!</h4>
+          <p class="text-xs text-white/80">You've unlocked the <strong>AWS Cloud Club Attendee Badge</strong>.</p>
+          <button onclick="downloadBadge()" class="bg-white text-orange-600 px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-amber-100 transition">
+            Download Social Badge
+          </button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SPONSORS SECTION -->
-  <section id="sponsors" class="py-24 px-6 max-w-7xl mx-auto w-full border-t border-white/15 text-center">
-    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-12">Sponsors</h2>
-    <div class="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
-      <div class="glass-card p-8 rounded-3xl">
-        <span class="text-xs font-bold uppercase tracking-widest text-white/70 block mb-2">Title Sponsor</span>
-        <h3 class="text-2xl font-bold text-white">AWS Cloud Club</h3>
-      </div>
-      <div class="glass-card p-8 rounded-3xl">
-        <span class="text-xs font-bold uppercase tracking-widest text-white/70 block mb-2">Ticketing Sponsor</span>
-        <h3 class="text-2xl font-bold text-white">Community Partner</h3>
-      </div>
-    </div>
-  </section>
-
-  <!-- TEAM SECTION -->
+  <!-- FEATURE 4: CATEGORIZED TEAM GRID -->
   <section id="team" class="py-24 px-6 max-w-7xl mx-auto w-full border-t border-white/15">
-    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-12 text-center">Our Team</h2>
+    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-8 text-center">Organizing Team</h2>
 
-    <!-- Captain -->
-    <div class="flex justify-center mb-10">
-      <div class="glass-card p-6 rounded-3xl text-center min-w-[200px] border-2 border-white/50">
-        <div class="w-16 h-16 rounded-full bg-white/20 mx-auto mb-3 flex items-center justify-center font-bold text-xl text-white">AG</div>
-        <h3 class="font-bold text-lg text-white">Arushi Garg</h3>
-        <span class="text-xs uppercase font-semibold text-white/80">Captain</span>
+    <div class="flex justify-center gap-3 mb-10">
+      <button onclick="switchTeamTab('core')" class="team-tab active glass-pill px-6 py-2 rounded-full text-xs font-bold text-white">Core Leads</button>
+      <button onclick="switchTeamTab('volunteers')" class="team-tab glass-pill px-6 py-2 rounded-full text-xs font-bold text-white/70">Volunteers</button>
+    </div>
+
+    <!-- Core Tab -->
+    <div id="team-core" class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div class="glass-card p-6 rounded-3xl text-center border-2 border-amber-400/50">
+        <div class="w-16 h-16 rounded-full bg-white/20 mx-auto mb-3 flex items-center justify-center font-bold text-xl">AG</div>
+        <h4 class="font-bold text-base text-white">Arushi Garg</h4>
+        <p class="text-xs text-amber-300 font-semibold mb-3">Captain</p>
+        <div class="flex justify-center gap-2 text-white/80">
+          <a href="#" class="hover:text-white"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+          <a href="#" class="hover:text-white"><i data-lucide="github" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+      <div class="glass-card p-6 rounded-3xl text-center">
+        <div class="w-16 h-16 rounded-full bg-white/20 mx-auto mb-3 flex items-center justify-center font-bold text-xl">S</div>
+        <h4 class="font-bold text-base text-white">Soumya</h4>
+        <p class="text-xs text-white/70 mb-3">Core Lead</p>
+        <div class="flex justify-center gap-2 text-white/80"><i data-lucide="linkedin" class="w-4 h-4"></i></div>
+      </div>
+      <div class="glass-card p-6 rounded-3xl text-center">
+        <div class="w-16 h-16 rounded-full bg-white/20 mx-auto mb-3 flex items-center justify-center font-bold text-xl">P</div>
+        <h4 class="font-bold text-base text-white">Priyanka</h4>
+        <p class="text-xs text-white/70 mb-3">Core Lead</p>
+        <div class="flex justify-center gap-2 text-white/80"><i data-lucide="linkedin" class="w-4 h-4"></i></div>
+      </div>
+      <div class="glass-card p-6 rounded-3xl text-center">
+        <div class="w-16 h-16 rounded-full bg-white/20 mx-auto mb-3 flex items-center justify-center font-bold text-xl">S</div>
+        <h4 class="font-bold text-base text-white">Sakshi</h4>
+        <p class="text-xs text-white/70 mb-3">Core Lead</p>
+        <div class="flex justify-center gap-2 text-white/80"><i data-lucide="linkedin" class="w-4 h-4"></i></div>
+      </div>
+      <div class="glass-card p-6 rounded-3xl text-center">
+        <div class="w-16 h-16 rounded-full bg-white/20 mx-auto mb-3 flex items-center justify-center font-bold text-xl">S</div>
+        <h4 class="font-bold text-base text-white">Shreya</h4>
+        <p class="text-xs text-white/70 mb-3">Core Lead</p>
+        <div class="flex justify-center gap-2 text-white/80"><i data-lucide="linkedin" class="w-4 h-4"></i></div>
       </div>
     </div>
 
-    <!-- Core -->
-    <h3 class="text-sm font-bold uppercase tracking-widest text-white/70 text-center mb-6">Core</h3>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12 text-center">
-      <div class="glass-card p-4 rounded-2xl font-semibold text-sm text-white">Soumya</div>
-      <div class="glass-card p-4 rounded-2xl font-semibold text-sm text-white">Priyanka</div>
-      <div class="glass-card p-4 rounded-2xl font-semibold text-sm text-white">Sakshi</div>
-      <div class="glass-card p-4 rounded-2xl font-semibold text-sm text-white">Shreya</div>
-    </div>
-
-    <!-- Volunteers -->
-    <h3 class="text-sm font-bold uppercase tracking-widest text-white/70 text-center mb-6">Volunteers</h3>
-    <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+    <!-- Volunteers Tab -->
+    <div id="team-volunteers" class="hidden flex flex-wrap justify-center gap-3">
       <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Lavanaya</span>
       <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Charu</span>
       <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Jyati</span>
@@ -430,118 +312,102 @@
       <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Gayatri</span>
       <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Anamika</span>
       <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Arushree</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Tvesha</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Anjali</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Aarushi</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Aniketa</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Bhavya</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Jhanvi</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Sania</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Saloni</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Tanisha</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Sneha</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Avni</span>
-      <span class="glass-pill px-4 py-2 rounded-xl text-xs font-semibold text-white">Payal</span>
     </div>
   </section>
 
-  <!-- VENUE SECTION -->
+  <!-- FEATURE 5: INTERACTIVE VENUE MAP -->
   <section id="venue" class="py-24 px-6 max-w-7xl mx-auto w-full border-t border-white/15">
-    <div class="glass-card p-8 sm:p-12 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-8">
-      <div>
-        <span class="text-xs font-bold uppercase tracking-widest text-white/70 block mb-2">Location</span>
-        <h2 class="text-3xl font-extrabold text-white mb-2">Auditorium</h2>
-        <p class="text-white/90 text-sm leading-relaxed">
+    <div class="grid lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-5 space-y-4">
+        <span class="glass-pill px-4 py-1 rounded-full text-xs font-bold uppercase text-amber-300">Venue & Navigation</span>
+        <h2 class="text-3xl font-extrabold text-white">Auditorium, IGDTUW</h2>
+        <p class="text-white/80 text-sm">
           Indira Gandhi Delhi Technical University for Women,<br />
-          Kashmere Gate, Delhi
+          Kashmere Gate, Delhi - 110006
         </p>
+
+        <div class="space-y-3 pt-2 text-xs">
+          <div class="flex items-center gap-3 glass-pill p-3 rounded-xl">
+            <i data-lucide="train" class="w-5 h-5 text-amber-300"></i>
+            <span><strong>Nearest Metro:</strong> Kashmere Gate (Gate No. 7)</span>
+          </div>
+          <div class="flex items-center gap-3 glass-pill p-3 rounded-xl">
+            <i data-lucide="map-pin" class="w-5 h-5 text-amber-300"></i>
+            <span><strong>Entry Point:</strong> Main Campus Gate 1</span>
+          </div>
+        </div>
       </div>
-      <button onclick="alert('Opening location map...')" class="border-2 border-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider text-white hover:bg-white hover:text-orange-600 transition">
-        Get Directions
-      </button>
+
+      <div class="lg:col-span-7">
+        <div id="map" class="w-full h-80 rounded-3xl glass-card overflow-hidden z-10"></div>
+      </div>
     </div>
   </section>
 
   <!-- FAQS SECTION -->
   <section id="faqs" class="py-24 px-6 max-w-4xl mx-auto w-full border-t border-white/15">
-    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-12 text-center">FAQs</h2>
+    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-12 text-center">Frequently Asked Questions</h2>
     
-    <div class="space-y-4">
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
-          <span>Q: What is AWS Cloud Club at IGDTUW?</span>
-          <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
-        </button>
-        <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
-          AWS Cloud Club at IGDTUW is a student community supported by AWS to foster cloud computing education, workshops, and real-world project experience.
-        </div>
-      </div>
-
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
-          <span>Q: How can I join AWS Cloud Club at IGDTUW?</span>
-          <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
-        </button>
-        <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
-          You can register for our community events, participate in tech cohorts, and follow our community announcements!
-        </div>
-      </div>
-
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
-          <span>Q: What activities does AWS Cloud Club at IGDTUW organize?</span>
-          <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
-        </button>
-        <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
-          Hands-on workshops, speaker sessions with industry pioneers, cloud study jams, community hackathons, and networking days.
-        </div>
-      </div>
-
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
-          <span>Q: What are the benefits of joining AWS Cloud Club at IGDTUW?</span>
-          <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
-        </button>
-        <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
-          Gain cloud domain expertise, connect with professionals, build resume-worthy cloud architecture projects, and access exclusive AWS resources.
-        </div>
-      </div>
-
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
-          <span>Q: Can beginners join AWS Cloud Club at IGDTUW?</span>
-          <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
-        </button>
-        <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
-          Yes! All skill levels are welcome. We cover fundamentals up to advanced architecture design.
-        </div>
-      </div>
-
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
-          <span>Q: What resources does AWS Cloud Club at IGDTUW provide for its members?</span>
-          <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
-        </button>
-        <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
-          Event slide decks, guided project repositories, certification prep roadmaps, and peer code reviews.
-        </div>
-      </div>
-
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
-          <span>Q: Are there any prerequisites for joining AWS Cloud Club at IGDTUW?</span>
-          <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
-        </button>
-        <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
-          No prior prerequisites required. Curiosity and enthusiasm to learn cloud computing are all you need!
-        </div>
-      </div>
+    <div class="space-y-4" id="faq-container">
+      <!-- FAQs dynamic toggle via JS -->
     </div>
   </section>
 
+  <!-- FEATURE 6: AI-POWERED EVENT ASSISTANT CHATBOT -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <button onclick="toggleChatbot()" class="glass-card bg-orange-600/90 hover:bg-orange-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center border border-white/40">
+      <i data-lucide="bot" class="w-6 h-6"></i>
+    </button>
+
+    <div id="chatbot-window" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 glass-card bg-slate-900/95 rounded-3xl overflow-hidden shadow-2xl border border-white/20 flex flex-col h-96">
+      <div class="p-4 border-b border-white/10 bg-orange-600/30 flex items-center justify-between">
+        <div class="flex items-center gap-2 text-xs font-bold">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+          <span>AWS Cloud Assistant</span>
+        </div>
+        <button onclick="toggleChatbot()" class="text-white/60 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div id="chat-messages" class="p-4 flex-1 overflow-y-auto text-xs space-y-3">
+        <div class="bg-white/10 p-3 rounded-2xl max-w-[85%]">
+          Hello! I am your AWS Assistant. Ask me anything like "When does the event start?" or "Who is speaking on AI?"
+        </div>
+      </div>
+
+      <div class="p-3 border-t border-white/10 flex gap-2">
+        <input type="text" id="chat-input" placeholder="Ask a question..." class="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none" onkeypress="if(event.key==='Enter') sendChatMessage()" />
+        <button onclick="sendChatMessage()" class="bg-amber-400 text-slate-900 px-3 py-2 rounded-xl text-xs font-bold"><i data-lucide="send" class="w-4 h-4"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVED AGENDA SLIDE-OVER -->
+  <div id="agenda-drawer" class="fixed inset-y-0 right-0 z-50 w-80 sm:w-96 glass-card bg-slate-900/95 shadow-2xl border-l border-white/20 p-6 hidden flex flex-col">
+    <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+      <h3 class="font-bold text-lg text-white flex items-center gap-2"><i data-lucide="bookmark" class="w-5 h-5 text-amber-300"></i> My Saved Schedule</h3>
+      <button onclick="toggleMyAgenda()" class="text-white/60 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <div id="saved-sessions-list" class="flex-1 overflow-y-auto space-y-3 text-xs">
+      <!-- Saved agenda items -->
+    </div>
+  </div>
+
+  <!-- SPEAKER DETAIL & Q&A MODAL -->
+  <div id="speaker-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card bg-slate-900/95 rounded-3xl max-w-lg w-full p-8 relative border border-white/30 text-white">
+      <button onclick="closeModal('speaker-modal')" class="absolute top-5 right-5 text-white/70 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div id="speaker-modal-content">
+        <!-- Content populated via JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- REGISTRATION MODAL -->
   <div id="reg-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="glass-card bg-orange-950/90 rounded-3xl max-w-md w-full p-8 relative border border-white/30 text-white">
+    <div class="glass-card bg-slate-900/95 rounded-3xl max-w-md w-full p-8 relative border border-white/30 text-white">
       <button onclick="closeModal('reg-modal')" class="absolute top-5 right-5 text-white/70 hover:text-white">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -549,62 +415,337 @@
       <h3 class="text-2xl font-bold mb-1">Event Registration</h3>
       <p class="text-xs text-white/70 mb-6">AWS Student Community Day 2024</p>
 
-      <form onsubmit="handleRegistration(event)" class="space-y-4">
+      <form onsubmit="handleRegistration(event)" class="space-y-4 text-xs">
         <div>
-          <label class="block text-xs font-bold uppercase mb-1 text-white/90">Full Name</label>
-          <input type="text" required placeholder="Your Name" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-white" />
+          <label class="block font-bold uppercase mb-1">Full Name</label>
+          <input type="text" required placeholder="Your Name" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none" />
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase mb-1 text-white/90">Email Address</label>
-          <input type="email" required placeholder="student@university.edu" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-white" />
+          <label class="block font-bold uppercase mb-1">Email Address</label>
+          <input type="email" required placeholder="student@university.edu" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none" />
         </div>
-        <button type="submit" class="w-full bg-white text-orange-600 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider hover:bg-orange-100 transition mt-2">
-          Confirm Ticket
+        <button type="submit" class="w-full bg-amber-400 text-slate-900 font-bold py-3.5 rounded-xl uppercase tracking-wider hover:bg-amber-300 transition">
+          Confirm Pass
         </button>
       </form>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="mt-auto py-12 px-6 border-t border-white/15 text-center text-white/80 text-xs">
-    <div class="max-w-7xl mx-auto space-y-3">
-      <p>© 2024 AWS Cloud Club, IGDTUW. All rights reserved.</p>
-      <p class="font-bold text-white">~ Designed & Developed by fatimah adnan ~</p>
-    </div>
+  <footer class="mt-auto py-8 px-6 border-t border-white/15 text-center text-white/80 text-xs">
+    <p>© 2024 AWS Cloud Club, IGDTUW. All rights reserved.</p>
   </footer>
 
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    lucide.createIcons();
+    // --- DATA STORES ---
+    const sessions = [
+      { id: 1, time: '09:30 AM', title: 'Check-in & Welcome Keynote', speaker: 'AWS Team & Faculty', track: 'Career', location: 'Main Stage' },
+      { id: 2, time: '10:30 AM', title: 'Two Journeys, One Cloud: Career Pathways', speaker: 'Jen Looper & Aditi Sawhney', track: 'Career', location: 'Main Stage' },
+      { id: 3, time: '11:40 AM', title: 'Unlocking and Mastering Cloud Basics', speaker: 'Varsha Verma', track: 'DevOps', location: 'Track A' },
+      { id: 4, time: '01:00 PM', title: 'Networking & Feast Lunch', speaker: 'All Attendees', track: 'Career', location: 'Dining Hall' },
+      { id: 5, time: '02:30 PM', title: 'Generative AI - Asking for a Friend', speaker: 'Kristine Howard', track: 'AI', location: 'Main Stage' },
+      { id: 6, time: '03:30 PM', title: 'AWS Security with IAM', speaker: 'Gargee Bhatnagar', track: 'Security', location: 'Track B' },
+      { id: 7, time: '04:30 PM', title: 'Empowering Innovators: CI/CD Pipelines', speaker: 'Dipali', track: 'DevOps', location: 'Track A' }
+    ];
+
+    const speakers = [
+      { name: 'Jen Looper', role: 'Head of Academic Advocacy', org: 'AWS', topic: 'Two Journeys, One Cloud', bio: 'Lead academic advocate encouraging global cloud literacy.' },
+      { name: 'Aditi Sawhney', role: 'Senior Digital Marketing Manager', org: 'AWS', topic: 'Two Journeys, One Cloud', bio: 'Pioneering growth strategies across APAC tech markets.' },
+      { name: 'Dipali', role: 'VP of Data Engineering', org: 'NatWest Group & AWS Hero', topic: 'Crafting CI/CD Pipelines', bio: 'AWS Hero specializing in cloud automation and robust DevOps pipelines.' },
+      { name: 'Varsha Verma', role: 'Senior Cloud Ops Engineer', org: 'Accenture', topic: 'Mastering Cloud Basics', bio: 'Cloud operations specialist focused on hybrid infrastructure.' },
+      { name: 'Kristine Howard', role: 'Dev Relations & Advocacy Lead', org: 'AWS APAC', topic: 'Generative AI Applications', bio: 'DevRel leader driving developer adoption for AI services.' },
+      { name: 'Gargee Bhatnagar', role: 'Cloud Consultant', org: 'Capgemini', topic: 'AWS IAM Deep Dive', bio: 'AWS Community Builder focusing on identity architecture and cloud security.' }
+    ];
+
+    const faqs = [
+      { q: 'What is AWS Cloud Club IGDTUW?', a: 'AWS Cloud Club at IGDTUW is a student community supported by AWS to foster cloud education, hands-on labs, and tech growth.' },
+      { q: 'Can beginners attend?', a: 'Yes! Sessions range from fundamental cloud paths to advanced enterprise architecture.' },
+      { q: 'Is registration free?', a: 'Yes, registration is completely free for students.' }
+    ];
+
+    let savedSessions = JSON.parse(localStorage.getItem('aws_saved_sessions') || '[]');
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      initTypingAnimation();
+      renderAgenda('all');
+      renderSpeakers();
+      renderFaqs();
+      initMap();
+      updateSavedBadge();
+      initCountdown();
+      VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
+    });
+
+    // --- CLI TYPING ANIMATION ---
+    function initTypingAnimation() {
+      const commands = [
+        "aws events get-community-day --location IGDTUW",
+        "aws iam attach-user-policy --user Student",
+        "aws s3 sync s3://cloud-day-2024 ./success"
+      ];
+      let cmdIndex = 0;
+      let charIndex = 0;
+      const target = document.getElementById('cli-text');
+
+      function type() {
+        if (charIndex < commands[cmdIndex].length) {
+          target.textContent += commands[cmdIndex].charAt(charIndex);
+          charIndex++;
+          setTimeout(type, 60);
+        } else {
+          setTimeout(erase, 2000);
+        }
+      }
+
+      function erase() {
+        if (charIndex > 0) {
+          target.textContent = commands[cmdIndex].substring(0, charIndex - 1);
+          charIndex--;
+          setTimeout(erase, 30);
+        } else {
+          cmdIndex = (cmdIndex + 1) % commands.length;
+          setTimeout(type, 500);
+        }
+      }
+      type();
+    }
+
+    // --- COUNTDOWN / DYNAMIC EVENT STATE ---
+    function initCountdown() {
+      const eventDate = new Date('February 3, 2024 09:30:00').getTime();
+      const now = new Date().getTime();
+
+      if (now > eventDate) {
+        document.getElementById('countdown-timer').innerHTML = `<span class="text-amber-300">🎉 Event Concluded — View Highlights & Sessions Below</span>`;
+      } else {
+        const diff = eventDate - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById('countdown-timer').innerText = `Starts in: ${days} Days`;
+      }
+    }
+
+    // --- AGENDA & BOOKMARKING ---
+    function renderAgenda(trackFilter) {
+      const list = document.getElementById('agenda-list');
+      list.innerHTML = '';
+
+      const filtered = trackFilter === 'all' ? sessions : sessions.filter(s => s.track === trackFilter);
+
+      filtered.forEach(session => {
+        const isSaved = savedSessions.includes(session.id);
+        const card = document.createElement('div');
+        card.className = 'glass-card p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+        card.innerHTML = `
+          <div class="flex items-center gap-4">
+            <span class="glass-pill px-3 py-1.5 rounded-lg text-xs font-bold text-amber-300 font-mono">${session.time}</span>
+            <div>
+              <h4 class="font-bold text-base text-white">${session.title}</h4>
+              <p class="text-xs text-white/80">${session.speaker}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs bg-white/10 px-3 py-1 rounded-full text-white/90 border border-white/20">${session.track}</span>
+            <button onclick="toggleBookmark(${session.id})" class="text-amber-300 hover:scale-110 transition">
+              <i data-lucide="${isSaved ? 'bookmark-check' : 'bookmark'}" class="w-5 h-5"></i>
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function filterAgenda(track) {
+      document.querySelectorAll('.agenda-filter-btn').forEach(btn => btn.classList.remove('active', 'border', 'border-amber-300'));
+      event.target.classList.add('active', 'border', 'border-amber-300');
+      renderAgenda(track);
+    }
+
+    function toggleBookmark(id) {
+      if (savedSessions.includes(id)) {
+        savedSessions = savedSessions.filter(sId => sId !== id);
+      } else {
+        savedSessions.push(id);
+      }
+      localStorage.setItem('aws_saved_sessions', JSON.stringify(savedSessions));
+      renderAgenda('all');
+      updateSavedBadge();
+    }
+
+    function updateSavedBadge() {
+      document.getElementById('saved-count').innerText = savedSessions.length;
+      const savedContainer = document.getElementById('saved-sessions-list');
+      savedContainer.innerHTML = '';
+
+      if (savedSessions.length === 0) {
+        savedContainer.innerHTML = `<p class="text-white/60">No sessions bookmarked yet.</p>`;
+        return;
+      }
+
+      savedSessions.forEach(id => {
+        const session = sessions.find(s => s.id === id);
+        if (session) {
+          const item = document.createElement('div');
+          item.className = 'glass-pill p-3 rounded-xl border border-white/20';
+          item.innerHTML = `<div class="font-bold text-white">${session.title}</div><div class="text-amber-300">${session.time}</div>`;
+          savedContainer.appendChild(item);
+        }
+      });
+    }
+
+    function toggleMyAgenda() {
+      document.getElementById('agenda-drawer').classList.toggle('hidden');
+    }
+
+    // --- SPEAKERS & LIVE Q&A MODAL ---
+    function renderSpeakers() {
+      const grid = document.getElementById('speakers-grid');
+      grid.innerHTML = '';
+
+      speakers.forEach((speaker, i) => {
+        const card = document.createElement('div');
+        card.className = 'glass-card p-6 rounded-3xl cursor-pointer hover:border-amber-300/50 transition';
+        card.setAttribute('data-tilt', '');
+        card.onclick = () => openSpeakerModal(i);
+        card.innerHTML = `
+          <h3 class="text-xl font-bold text-white mb-1">${speaker.name}</h3>
+          <p class="text-xs font-semibold text-amber-300 mb-4">${speaker.role} at ${speaker.org}</p>
+          <div class="bg-black/20 p-3 rounded-2xl border border-white/10 text-xs">
+            <strong class="block text-white mb-1">Session:</strong> ${speaker.topic}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
+    }
+
+    function openSpeakerModal(index) {
+      const speaker = speakers[index];
+      const container = document.getElementById('speaker-modal-content');
+      container.innerHTML = `
+        <h3 class="text-2xl font-bold mb-1 text-white">${speaker.name}</h3>
+        <p class="text-xs text-amber-300 mb-4">${speaker.role} — ${speaker.org}</p>
+        <p class="text-xs text-white/80 leading-relaxed mb-6">${speaker.bio}</p>
+
+        <div class="border-t border-white/10 pt-4">
+          <h4 class="font-bold text-xs uppercase text-white mb-2">Ask ${speaker.name} a Pre-Event Question</h4>
+          <input type="text" id="qa-input" placeholder="Type your question..." class="w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white mb-2 focus:outline-none" />
+          <button onclick="submitQA()" class="w-full bg-amber-400 text-slate-900 font-bold py-2 rounded-xl text-xs">Submit Question</button>
+        </div>
+      `;
+      openModal('speaker-modal');
+    }
+
+    function submitQA() {
+      alert('Question submitted to the speaker!');
+      closeModal('speaker-modal');
+    }
+
+    // --- GAMIFIED CLOUD QUEST ---
+    function answerQuest(step, isCorrect) {
+      if (!isCorrect) {
+        alert('Incorrect! Try again.');
+        return;
+      }
+      if (step === 1) {
+        document.getElementById('quest-q1').classList.add('hidden');
+        document.getElementById('quest-q2').classList.remove('hidden');
+      } else if (step === 2) {
+        document.getElementById('quest-q2').classList.add('hidden');
+        document.getElementById('quest-success').classList.remove('hidden');
+      }
+    }
+
+    function downloadBadge() {
+      alert('Badge generated! Downloading your AWS Community Attendee Badge image.');
+    }
+
+    // --- CHATBOT WIDGET ---
+    function toggleChatbot() {
+      document.getElementById('chatbot-window').classList.toggle('hidden');
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const val = input.value.trim().toLowerCase();
+      if (!val) return;
+
+      const messages = document.getElementById('chat-messages');
+      messages.innerHTML += `<div class="bg-amber-400/20 p-3 rounded-2xl max-w-[85%] ml-auto text-amber-200">${input.value}</div>`;
+
+      let reply = "I'm your AWS assistant! Try asking about sessions, venue, or registration details.";
+      if (val.includes('start') || val.includes('time')) reply = "The event starts at 09:30 AM at the IGDTUW Auditorium.";
+      else if (val.includes('ai') || val.includes('generative')) reply = "Kristine Howard is delivering a session on Generative AI at 02:30 PM!";
+      else if (val.includes('venue') || val.includes('where')) reply = "The event is hosted at the Auditorium, IGDTUW, Kashmere Gate, Delhi.";
+
+      setTimeout(() => {
+        messages.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl max-w-[85%]">${reply}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+      }, 400);
+
+      input.value = '';
+    }
+
+    // --- MAPBOX / LEAFLET VENUE MAP ---
+    function initMap() {
+      const map = L.map('map').setView([28.6665, 77.2332], 16);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(map);
+
+      L.marker([28.6665, 77.2332]).addTo(map)
+        .bindPopup('<b>IGDTUW Auditorium</b><br>AWS Community Day 2024 Event Site')
+        .openPopup();
+    }
+
+    // --- TEAM TAB SWITCHING ---
+    function switchTeamTab(tab) {
+      document.querySelectorAll('.team-tab').forEach(b => b.classList.remove('active', 'text-white'));
+      if (tab === 'core') {
+        document.getElementById('team-core').classList.remove('hidden');
+        document.getElementById('team-volunteers').classList.add('hidden');
+      } else {
+        document.getElementById('team-core').classList.add('hidden');
+        document.getElementById('team-volunteers').classList.remove('hidden');
+      }
+    }
+
+    // --- FAQS RENDERING ---
+    function renderFaqs() {
+      const container = document.getElementById('faq-container');
+      faqs.forEach(faq => {
+        const item = document.createElement('div');
+        item.className = 'glass-card rounded-2xl overflow-hidden';
+        item.innerHTML = `
+          <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-white flex justify-between items-center text-sm sm:text-base">
+            <span>${faq.q}</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200"></i>
+          </button>
+          <div class="hidden p-6 pt-0 text-xs sm:text-sm text-white/80 leading-relaxed border-t border-white/10">
+            ${faq.a}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+      lucide.createIcons();
+    }
 
     function toggleFaq(btn) {
       const content = btn.nextElementSibling;
       const icon = btn.querySelector('i');
       content.classList.toggle('hidden');
-      if (content.classList.contains('hidden')) {
-        icon.style.transform = 'rotate(0deg)';
-      } else {
-        icon.style.transform = 'rotate(180deg)';
-      }
+      icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
     }
 
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
+    // --- MODAL HELPERS ---
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function handleRegistration(e) {
       e.preventDefault();
-      alert('Registration Confirmed!');
+      alert('Registration Confirmed! Check your inbox for your pass.');
       closeModal('reg-modal');
-    }
-
-    function showQuizResult(track, session) {
-      const resDiv = document.getElementById('quiz-result');
-      resDiv.classList.remove('hidden');
-      resDiv.innerHTML = `Recommended for You: <span class="underline decoration-white/50">${track}</span> — Recommended Session: <span class="font-black text-amber-200">"${session}"</span>`;
     }
   </script>
 </body>
